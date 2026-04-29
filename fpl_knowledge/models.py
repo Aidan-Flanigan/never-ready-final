@@ -45,7 +45,7 @@ knowledge_vars = [
     "KH1correct", "KH2correct", "KH3correct",
     "KH4correct", "KH5correct", "KH6correct",
     "KH7correct", "KH8correct", "KH9correct",
-    "LMscore", "KHscore", "SUBKNOWL1"
+    "ON1correct", "ON2correct", "SUBKNOWL1"
 ]
 
 # Naive Bayes uses only binary vars
@@ -53,7 +53,8 @@ nb_vars = [
     "FK1correct", "FK2correct", "FK3correct",
     "KH1correct", "KH2correct", "KH3correct",
     "KH4correct", "KH5correct", "KH6correct",
-    "KH7correct", "KH8correct", "KH9correct"
+    "KH7correct", "KH8correct", "KH9correct",
+    "ON1correct", "ON2correct"
 ]
 
 X = df[knowledge_vars].copy()
