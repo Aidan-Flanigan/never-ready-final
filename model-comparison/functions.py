@@ -155,9 +155,9 @@ def run_classification_models(
             "accuracy": accuracy,
             "roc_auc": roc_auc,
             "balanced_accuracy": balanced_acc,
-            f"precision_{target_name}": precision_pos,
-            f"recall_{target_name}": recall_pos,
-            f"f1_{target_name}": f1_pos
+            f"precision": precision_pos,
+            f"recall": recall_pos,
+            f"f1": f1_pos
         })
 
         fitted_models[model_name] = model
