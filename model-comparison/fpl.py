@@ -39,12 +39,12 @@ nb_vars = [
 ]
 
 thresholds = {
-    "Baseline Logistic Regression": 0.25,
-    "LASSO Logistic Regression with CV": 0.25,
-    "Decision Tree": 0.30,
-    "Random Forest": 0.25,
-    "Bernoulli Naive Bayes": 0.25,
-    "Gradient Boosting": 0.15
+    "Baseline Logistic Regression": 0.5,
+    "LASSO Logistic Regression with CV": 0.5,
+    "Decision Tree": 0.5,
+    "Random Forest": 0.5,
+    "Bernoulli Naive Bayes": 0.5,
+    "Gradient Boosting": 0.5
 }
 
 # Run models
@@ -57,6 +57,7 @@ comparison, fitted_models = run_classification_models(
     target_name="low_fpl",
     test_size=0.25,
     random_state=42,
-    thresholds=thresholds
+    tune_threshold=True,
+    threshold_metric="balanced_accuracy"
 )
 

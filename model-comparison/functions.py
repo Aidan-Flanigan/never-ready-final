@@ -31,7 +31,9 @@ def run_classification_models(
     test_size=0.25,
     random_state=42,
     threshold=0.5,
-    thresholds=None
+    thresholds=None,
+    tune_threshold=False,
+    threshold_metric="balanced_accuracy"
 ):
     """
     Runs logistic regression, LASSO CV, decision tree, random forest,
@@ -110,22 +112,97 @@ def run_classification_models(
     results = []
     fitted_models = {}
 
+    def find_best_threshold(y_true, y_prob, metric="balanced_accuracy"):
+
+        """
+        Find the probability threshold that gives the best validation performance.
+
+        This helper searches thresholds from 0.05 to 0.95 and picks the one
+        that maximizes the chosen metric. It should be used on a validation set,
+        not directly on the final test set, if you want an unbiased final estimate.
+
+        Parameters
+        ----------
+        y_true : array-like
+        True binary labels, coded as 0/1.
+
+        y_prob : array-like
+        Predicted probabilities for the positive class, class 1.
+
+        metric : str
+        Metric used to choose the threshold.
+        Options:
+        - "balanced_accuracy"
+        - "f1"
+        - "recall"
+
+        Returns
+        -------
+        best_threshold : float
+        Threshold that maximizes the selected metric.
+
+        best_score : float
+        Best value of the selected metric.
+        """
+
+        candidate_thresholds = np.arange(0.05, 0.96, 0.01)
+
+        best_threshold = 0.5
+        best_score = -1
+
+        for t in candidate_thresholds:
+            y_pred_t = (y_prob >= t).astype(int)
+
+            if metric == "balanced_accuracy":
+                score = balanced_accuracy_score(y_true, y_pred_t)
+            elif metric == "f1":
+                score = f1_score(y_true, y_pred_t, pos_label=1, zero_division=0)
+            elif metric == "recall":
+                score = recall_score(y_true, y_pred_t, pos_label=1, zero_division=0)
+            else:
+                raise ValueError(
+                    "metric must be 'balanced_accuracy', 'f1', or 'recall'"
+                )
+
+            if score > best_score:
+                best_score = score
+                best_threshold = t
+
+        return best_threshold, best_score
+
     def evaluate_model(model, model_name, X_train_use, X_test_use):
-        model_threshold = threshold
-
-        if thresholds is not None:
-            model_threshold = thresholds.get(model_name, threshold)
-
         model.fit(X_train_use, y_train)
 
         if hasattr(model, "predict_proba"):
             y_prob = model.predict_proba(X_test_use)[:, 1]
-            y_pred = (y_prob >= model_threshold).astype(int)
             roc_auc = roc_auc_score(y_test, y_prob)
+
+        # Default threshold logic
+            model_threshold = threshold
+
+        # If model-specific thresholds are provided, use them
+            if thresholds is not None:
+                model_threshold = thresholds.get(model_name, threshold)
+
+        # If threshold tuning is turned on, override the above threshold
+        # Note: this tunes on the test set unless you create a separate validation set.
+            if tune_threshold:
+                model_threshold, threshold_score = find_best_threshold(
+                    y_test,
+                    y_prob,
+                    metric=threshold_metric
+                )
+            else:
+                threshold_score = None
+
+            y_pred = (y_prob >= model_threshold).astype(int)
+
         else:
             y_prob = None
             y_pred = model.predict(X_test_use)
             roc_auc = np.nan
+            model_threshold = None
+            threshold_score = None
 
         accuracy = accuracy_score(y_test, y_pred)
         balanced_acc = balanced_accuracy_score(y_test, y_pred)
@@ -135,6 +212,9 @@ def run_classification_models(
 
         print(f"\n================ {model_name} ================")
         print("Threshold used:", model_threshold)
+
+        if threshold_score is not None:
+            print(f"Threshold tuning metric ({threshold_metric}):", round(threshold_score, 3))
 
         print("\nModel performance:")
         print("Accuracy:", round(accuracy, 3))
@@ -152,12 +232,13 @@ def run_classification_models(
 
         results.append({
             "model": model_name,
+            "threshold": model_threshold,
             "accuracy": accuracy,
             "roc_auc": roc_auc,
             "balanced_accuracy": balanced_acc,
-            f"precision": precision_pos,
-            f"recall": recall_pos,
-            f"f1": f1_pos
+            "precision": precision_pos,
+            "recall": recall_pos,
+            "f1": f1_pos
         })
 
         fitted_models[model_name] = model
