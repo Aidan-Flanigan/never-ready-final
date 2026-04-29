@@ -12,8 +12,8 @@ from sklearn.metrics import classification_report, roc_auc_score, accuracy_score
 
 # Data Prep 
 df = pd.read_csv("data/data.csv")
-df = df[df["fpl"].isin([1, 2, 3])].copy()
-df["low_fpl"] = df["fpl"].isin([1, 2]).astype(int)
+df = df[df["FRAUD2"].isin([0, 1])].copy()
+df["fraud"] = df["FRAUD2"].astype(int)
 
 knowledge_vars = [
     "FK1correct", "FK2correct", "FK3correct", "KH1correct", "KH2correct", "KH3correct",
@@ -24,7 +24,7 @@ nb_vars = knowledge_vars[:12]
 
 X = df[knowledge_vars].copy()
 X["SUBKNOWL1"] = X["SUBKNOWL1"].replace(-1, np.nan)
-y = df["low_fpl"]
+y = df["fraud"]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.25, random_state=42, stratify=y
