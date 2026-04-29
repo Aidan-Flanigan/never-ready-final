@@ -27,17 +27,19 @@ from sklearn.metrics import (
 
 df = pd.read_csv("data/data.csv")
 
-# target: fpl
-# 1 = <100% FPL
-# 2 = 100%-199% FPL
-# 3 = 200%+ FPL
+# Target: Volatility
+# Question: Which of the following best describes how your household’s income 
+#           changes from month to month, if at all?
+# 1 = Roughly the same each month
+# 2 = Roughly the same most months, but some unusually high or low months 
+#     during the year
+# 3 = Often varies quite a bit from one month to the next
 
-# Binary target:
-# 1 = below 200% FPL
-# 0 = 200%+ FPL
-df = df[df["fpl"].isin([1, 2, 3])].copy()
-df["low_fpl"] = df["fpl"].isin([1, 2]).astype(int)
-
+# Binary target: Stable Finances
+# 1 = Roughly the same for most or each months (Codes 1, 2)
+# 0 = Often varies quite a bit from one month to the next (Code 3)
+df = df[df["VOLATILITY"].isin([1, 2, 3])]
+df["sbl_fin"] = df["VOLATILITY"].isin([1, 2]).astype(int)
 
 # Predictors
 knowledge_vars = [
@@ -59,11 +61,11 @@ nb_vars = [
 
 X = df[knowledge_vars].copy()
 
-# FK/KH correct variables already code refused answers as 0 = incorrect.
+# FK/KH/ON correct variables already code refused answers as 0 = incorrect.
 # SUBKNOWL1 is raw self-rated knowledge, where -1 means refused.
 X["SUBKNOWL1"] = X["SUBKNOWL1"].replace(-1, np.nan)
 
-y = df["low_fpl"]
+y = df["sbl_fin"]
 
 print("Predictors used:")
 print(knowledge_vars)
@@ -94,9 +96,9 @@ def evaluate_model(model, model_name, X_train_use, X_test_use):
 
     accuracy = accuracy_score(y_test, y_pred)
     balanced_acc = balanced_accuracy_score(y_test, y_pred)
-    precision_low_fpl = precision_score(y_test, y_pred, pos_label=1)
-    recall_low_fpl = recall_score(y_test, y_pred, pos_label=1)
-    f1_low_fpl = f1_score(y_test, y_pred, pos_label=1)
+    precision_sbl_fin = precision_score(y_test, y_pred, pos_label=1)
+    recall_sbl_fin = recall_score(y_test, y_pred, pos_label=1)
+    f1_sbl_fin = f1_score(y_test, y_pred, pos_label=1)
 
     if y_prob is not None:
         roc_auc = roc_auc_score(y_test, y_prob)
@@ -109,9 +111,9 @@ def evaluate_model(model, model_name, X_train_use, X_test_use):
     print("Accuracy:", round(accuracy, 3))
     print("Balanced accuracy:", round(balanced_acc, 3))
     print("ROC AUC:", round(roc_auc, 3))
-    print("Precision for low_fpl:", round(precision_low_fpl, 3))
-    print("Recall for low_fpl:", round(recall_low_fpl, 3))
-    print("F1 for low_fpl:", round(f1_low_fpl, 3))
+    print("Precision for sbl_fin:", round(precision_sbl_fin, 3))
+    print("Recall for sbl_fin:", round(recall_sbl_fin, 3))
+    print("F1 for sbl_fin:", round(f1_sbl_fin, 3))
 
     print("\nConfusion matrix:")
     print(confusion_matrix(y_test, y_pred))
@@ -124,9 +126,9 @@ def evaluate_model(model, model_name, X_train_use, X_test_use):
         "accuracy": accuracy,
         "balanced_accuracy": balanced_acc,
         "roc_auc": roc_auc,
-        "precision_low_fpl": precision_low_fpl,
-        "recall_low_fpl": recall_low_fpl,
-        "f1_low_fpl": f1_low_fpl
+        "precision_sbl_fin": precision_sbl_fin,
+        "recall_sbl_fin": recall_sbl_fin,
+        "f1_sbl_fin": f1_sbl_fin
     })
 
     return model
