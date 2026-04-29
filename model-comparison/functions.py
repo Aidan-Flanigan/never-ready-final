@@ -7,7 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.metrics import (
     accuracy_score,
@@ -107,7 +107,6 @@ def run_classification_models(
 
     results = []
     fitted_models = {}
-    extra_outputs = {}
 
     def evaluate_model(model, model_name, X_train_use, X_test_use):
         model.fit(X_train_use, y_train)
@@ -184,7 +183,6 @@ def run_classification_models(
     print("\nBaseline logistic regression coefficients:")
     print(coef_table)
 
-    extra_outputs["baseline_coefficients"] = coef_table
 
     # Model 2: LASSO Logistic Regression with CV
     lasso_cv = make_pipeline(
@@ -230,9 +228,6 @@ def run_classification_models(
     print("\nBest C chosen by cross-validation:")
     print(lasso_logit.C_[0])
 
-    extra_outputs["lasso_coefficients"] = lasso_coef_table
-    extra_outputs["lasso_selected_variables"] = selected_vars
-    extra_outputs["lasso_best_c"] = lasso_logit.C_[0]
 
     # Model 3: Decision Tree
     decision_tree = make_pipeline(
@@ -262,7 +257,6 @@ def run_classification_models(
     print("\nDecision tree feature importance:")
     print(tree_importance)
 
-    extra_outputs["tree_importance"] = tree_importance
 
     # Model 4: Random Forest
     random_forest = make_pipeline(
@@ -293,7 +287,6 @@ def run_classification_models(
     print("\nRandom forest feature importance:")
     print(rf_importance)
 
-    extra_outputs["random_forest_importance"] = rf_importance
 
     # Model 5: Bernoulli Naive Bayes
     if nb_vars is not None:
@@ -328,10 +321,40 @@ def run_classification_models(
         else:
             print("\nSkipping Naive Bayes because no valid nb_vars were found.")
 
+    # Model 6: Gradient Boosting
+    gradient_boosting = make_pipeline(
+        SimpleImputer(strategy="median"),
+        GradientBoostingClassifier(
+            n_estimators=200,
+            learning_rate=0.05,
+            max_depth=3,
+            min_samples_leaf=30,
+            random_state=random_state
+        )
+    )
+
+    gradient_boosting = evaluate_model(
+        gradient_boosting,
+        "Gradient Boosting",
+        X_train,
+        X_test
+    )
+
+    gb = gradient_boosting.named_steps["gradientboostingclassifier"]
+
+    gb_importance = pd.DataFrame({
+        "variable": available_predictors,
+        "importance": gb.feature_importances_
+    }).sort_values("importance", ascending=False)
+
+    print("\nGradient boosting feature importance:")
+    print(gb_importance)
+
+
     # Final comparison
     comparison = pd.DataFrame(results).sort_values("roc_auc", ascending=False)
 
     print("\n================ Final Model Comparison ================")
     print(comparison.round(3))
 
-    return comparison, fitted_models, extra_outputs
+    return comparison, fitted_models
