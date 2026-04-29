@@ -30,8 +30,6 @@ knowledge_vars = [
 
 # Naive Bayes predictors
 # Bernoulli Naive Bayes should use binary variables only.
-# So do not include LMscore, KHscore, or SUBKNOWL1.
-
 nb_vars = [
     "FK1correct", "FK2correct", "FK3correct",
     "KH1correct", "KH2correct", "KH3correct",
