@@ -36,13 +36,13 @@ nb_vars = [
     "FK1correct", "FK2correct", "FK3correct",
     "KH1correct", "KH2correct", "KH3correct",
     "KH4correct", "KH5correct", "KH6correct",
-    "KH7correct", "KH8correct", "KH9correct",
+    "KH7correct", "KH8correct", "KH9correct", 
     "ON1correct", "ON2correct"
 ]
 
 
 # Run models
-comparison, fitted_models, extra_outputs = run_classification_models(
+comparison, fitted_models = run_classification_models(
     df=df,
     target_col="low_fpl",
     predictor_vars=knowledge_vars,
