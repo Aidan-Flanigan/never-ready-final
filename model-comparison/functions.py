@@ -30,7 +30,8 @@ def run_classification_models(
     target_name=None,
     test_size=0.25,
     random_state=42,
-    threshold=0.5
+    threshold=0.5,
+    thresholds=None
 ):
     """
     Runs logistic regression, LASSO CV, decision tree, random forest,
@@ -110,11 +111,16 @@ def run_classification_models(
     fitted_models = {}
 
     def evaluate_model(model, model_name, X_train_use, X_test_use):
+        model_threshold = threshold
+
+        if thresholds is not None:
+            model_threshold = thresholds.get(model_name, threshold)
+
         model.fit(X_train_use, y_train)
 
         if hasattr(model, "predict_proba"):
             y_prob = model.predict_proba(X_test_use)[:, 1]
-            y_pred = (y_prob >= threshold).astype(int)
+            y_pred = (y_prob >= model_threshold).astype(int)
             roc_auc = roc_auc_score(y_test, y_prob)
         else:
             y_prob = None
@@ -128,6 +134,7 @@ def run_classification_models(
         f1_pos = f1_score(y_test, y_pred, pos_label=1, zero_division=0)
 
         print(f"\n================ {model_name} ================")
+        print("Threshold used:", model_threshold)
 
         print("\nModel performance:")
         print("Accuracy:", round(accuracy, 3))
