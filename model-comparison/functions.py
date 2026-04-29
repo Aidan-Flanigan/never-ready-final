@@ -29,7 +29,8 @@ def run_classification_models(
     raw_missing_map=None,
     target_name=None,
     test_size=0.25,
-    random_state=42
+    random_state=42,
+    threshold=0.5
 ):
     """
     Runs logistic regression, LASSO CV, decision tree, random forest,
@@ -111,12 +112,13 @@ def run_classification_models(
     def evaluate_model(model, model_name, X_train_use, X_test_use):
         model.fit(X_train_use, y_train)
 
-        y_pred = model.predict(X_test_use)
-
         if hasattr(model, "predict_proba"):
             y_prob = model.predict_proba(X_test_use)[:, 1]
+            y_pred = (y_prob >= threshold).astype(int)
             roc_auc = roc_auc_score(y_test, y_prob)
         else:
+            y_prob = None
+            y_pred = model.predict(X_test_use)
             roc_auc = np.nan
 
         accuracy = accuracy_score(y_test, y_pred)

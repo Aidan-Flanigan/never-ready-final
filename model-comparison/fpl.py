@@ -48,6 +48,7 @@ comparison, fitted_models = run_classification_models(
     raw_missing_map={"SUBKNOWL1": [-1]},
     target_name="low_fpl",
     test_size=0.25,
-    random_state=42
+    random_state=42,
+    threshold=0.5 
 )
 
