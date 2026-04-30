@@ -133,5 +133,17 @@ The data are split into a training set and a held-out test set. When threshold t
 ## V. Recommended Model(s) and Conclusions
 
 ## VI. Modeling Limitations and Potential Extensions
+### Limitations
+The modeling framework is subject to several sources of bias that may affect classification performance. Because the analysis is designed to test whether financial knowledge predicts these outcomes, the predictor set consists entirely of financial knowledge quiz items, introducing omitted variable bias. Important demographic, behavioral, and cognitive factors such as age, income, or memory constraints are excluded despite likely being correlated with both the predictors and outcomes. This risks overstating the role of financial knowledge in explaining outcomes like fraud victimization or savings behavior. There is also potential sample selection bias depending on how the underlying survey data was collected and filtered, which may limit the generalizing the findings to broader populations. Additionally, measurement error in self-reported survey responses may introduce noise and reduce the clarity of class boundaries, making it more difficult for the models to accurately distinguish between classes.
+
+On the modeling side, hyperparameters are fixed at reasonable defaults rather than systematically tuned. The target variables are constructed using somewhat arbitrary thresholds to define class membership which makes the results sensitive to alternative labeling choices. Separately, classification thresholds used to convert predicted probabilities into class predictions are selected via cross-validation to optimize a chosen performance metric. While this improves predictive performance, it may bias results toward that specific metric and may not apply to the broader population. Class imbalance may further skew performance toward the majority class, even when adjustments are applied. Taken together, these limitations suggest that the results should be interpreted as predictive associations rather than evidence of causal effects
+
+### Extensions
+Several extensions could address the limitations outlined above and improve both the predictive performance and applicability of the classification framework. First, expanding the feature set to include demographic, behavioral, and cognitive variables such as age, income, and measures of financial behavior would help reduce omitted variable bias and provide a more comprehensive view of the factors influencing outcomes like fraud and savings. This would also improve the model’s ability to generalize across different populations.
+
+Second, the way the target variables are defined could be improved by trying different cutoff values or moving beyond simple binary outcomes. For example, using multiple categories or continuous measures would better capture differences in financial behavior and reduce sensitivity to arbitrary thresholds.
+
+On the modeling side, performance could be improved by more systematically tuning hyperparameters instead of relying on default settings. While the current approach already tunes classification thresholds, this could be expanded by evaluating models across multiple performance metrics or choosing thresholds that better reflect real-world decision tradeoffs. In addition, using stronger validation methods such as k-fold cross-validation or repeated train-test splits could provide more reliable estimates of how the models perform on new data.
+
 
 ## VII. Rerun Instructions
