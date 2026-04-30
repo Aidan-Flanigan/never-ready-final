@@ -53,8 +53,8 @@ comparison, fitted_models = run_classification_models(
     random_state=42,
     tune_threshold=True,
     threshold_metric="balanced_accuracy",
-    results_csv = "data/low_HHI_results.csv"
-)
+    results_csv="data/low_HHI_results.csv"
+)   
 
 print("testing models with high_fpl")
 comparison, fitted_models = run_classification_models(
@@ -68,6 +68,5 @@ comparison, fitted_models = run_classification_models(
     random_state=42,
     tune_threshold=True,
     threshold_metric="balanced_accuracy",
-    results_csv = "data/high_HHI_results.csv"
-
+    results_csv="data/high_HHI_results.csv"
 )
