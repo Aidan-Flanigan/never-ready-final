@@ -1,12 +1,13 @@
+"""
+Bar-chart helper. Called by run_all.py.
+"""
 import os
+
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-import numpy as np
 
-from targets import TARGETS
-
-PLOTS_DIR = "visuals/plots"
 METRICS = ["precision", "recall", "f1", "accuracy"]
 METRIC_LABELS = {
     "precision": "Precision",
@@ -22,13 +23,18 @@ SHORT_NAMES = {
     "Random Forest":                     "Random\nForest",
     "Bernoulli Naive Bayes":             "Naive\nBayes",
     "Gradient Boosting":                 "Gradient\nBoosting",
+    "CatBoost":                          "CatBoost",
 }
 
 COLORS = ["#2E86AB", "#E84855", "#3BB273", "#F4A261"]
 
 
-def plot_bar_chart(csv_path, output_path, title_suffix):
-    df = pd.read_csv(csv_path)
+def plot_metric_bar_chart(results_csv, output_path, target_name=None):
+    """
+    Save a grouped bar chart of precision / recall / F1 / accuracy from a results CSV.
+    """
+    
+    df = pd.read_csv(results_csv)
     df["model_label"] = df["model"].map(SHORT_NAMES).fillna(df["model"])
 
     models = df["model_label"].tolist()
@@ -61,11 +67,12 @@ def plot_bar_chart(csv_path, output_path, title_suffix):
                 fontsize=7.5, color="#333333",
             )
 
+    title_target = target_name or os.path.splitext(os.path.basename(results_csv))[0]
     ax.set_xticks(x)
     ax.set_xticklabels(models, fontsize=10)
     ax.set_ylabel("Score", fontsize=11)
     ax.set_title(
-        f"Model Comparison ({title_suffix}) — Accuracy, Precision, Recall, F1",
+        f"Model Comparison \u2014 {title_target}",
         fontsize=13, fontweight="bold", pad=15,
     )
     ax.set_ylim(0, 1.08)
@@ -90,21 +97,4 @@ def plot_bar_chart(csv_path, output_path, title_suffix):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print(f"Chart saved to {output_path}")
-
-
-def main():
-    for target in TARGETS:
-        name = target["name"]
-        csv_path = target["results_csv"]
-        output_path = os.path.join(PLOTS_DIR, f"{name}_comparison.png")
-
-        if not os.path.exists(csv_path):
-            print(f"Skipping {name}: {csv_path} not found")
-            continue
-
-        plot_bar_chart(csv_path, output_path, title_suffix=name)
-
-
-if __name__ == "__main__":
-    main()
+    print(f"Bar chart saved to {output_path}")

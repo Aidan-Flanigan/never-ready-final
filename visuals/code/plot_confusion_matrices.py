@@ -1,32 +1,25 @@
+"""
+Confusion-matrix helper. Called by run_all.py with already-fitted models.
+"""
 import os
-import sys
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 
-sys.path.append("model-comparison")
-from functions import run_classification_models  # noqa: E402
 
-from targets import TARGETS, KNOWLEDGE_VARS, NB_VARS, RAW_MISSING_MAP
-
-DATA_PATH = "data/data.csv"
-PLOTS_DIR = "visuals/plots"
-
-
-def plot_confusion_matrix(cm, model_name, target_name, output_dir):
+def _plot_one(cm, model_name, output_dir, class_names):
+    """
+    Save one confusion-matrix PNG to `output_dir/cm_<model>.png`.
+    """
     fig, ax = plt.subplots(figsize=(5, 4))
 
     im = ax.imshow(cm, interpolation="nearest", cmap="Blues")
     plt.colorbar(im, ax=ax)
 
-    classes = ["Negative (0)", "Positive (1)"]
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
-    ax.set_xticklabels(classes, fontsize=10)
-    ax.set_yticklabels(classes, fontsize=10)
+    ax.set_xticklabels(class_names, fontsize=10)
+    ax.set_yticklabels(class_names, fontsize=10)
 
     thresh = cm.max() / 2
     for i in range(2):
@@ -39,7 +32,7 @@ def plot_confusion_matrix(cm, model_name, target_name, output_dir):
 
     ax.set_xlabel("Predicted", fontsize=11, labelpad=10)
     ax.set_ylabel("Actual", fontsize=11, labelpad=10)
-    ax.set_title(f"{target_name} — {model_name}", fontsize=12, fontweight="bold", pad=12)
+    ax.set_title(model_name, fontsize=12, fontweight="bold", pad=12)
 
     plt.tight_layout()
 
@@ -50,41 +43,26 @@ def plot_confusion_matrix(cm, model_name, target_name, output_dir):
     print(f"Saved: {save_path}")
 
 
-def run_for_target(target, raw_df):
-    name = target["name"]
-    target_col = target["target_col"]
-    output_dir = os.path.join(PLOTS_DIR, f"{name}_confusion_matrices")
+def plot_confusion_matrices(
+    fitted_models,
+    X_test,
+    y_test,
+    available_nb_vars,
+    comparison,
+    output_dir,
+    class_names=("Negative (0)", "Positive (1)"),
+):
+    """
+    Save one confusion-matrix PNG per fitted model into `output_dir`.
+    """
+
     os.makedirs(output_dir, exist_ok=True)
 
-    df = target["prep"](raw_df)
-
-    comparison, fitted_models = run_classification_models(
-        df=df,
-        target_col=target_col,
-        predictor_vars=KNOWLEDGE_VARS,
-        nb_vars=NB_VARS,
-        raw_missing_map=RAW_MISSING_MAP,
-        target_name=name,
-        test_size=0.25,
-        random_state=42,
-        tune_threshold=True,
-        threshold_metric=target["threshold_metric"],
-        results_csv=target["results_csv"],
-    )
-
-    df_model = df[df[target_col].isin([0, 1])].copy()
-    X = df_model[KNOWLEDGE_VARS].copy()
-    for col, missing_vals in RAW_MISSING_MAP.items():
-        if col in X.columns:
-            X[col] = X[col].replace(missing_vals, np.nan)
-    y = df_model[target_col]
-
-    _, X_test, _, y_test = train_test_split(
-        X, y, test_size=0.25, random_state=42, stratify=y
-    )
-
     for model_name, model in fitted_models.items():
-        X_test_use = X_test[NB_VARS] if model_name == "Bernoulli Naive Bayes" else X_test
+        if model_name == "Bernoulli Naive Bayes" and available_nb_vars:
+            X_test_use = X_test[available_nb_vars]
+        else:
+            X_test_use = X_test
 
         threshold_match = comparison.loc[
             comparison["model"] == model_name, "threshold"
@@ -98,17 +76,6 @@ def run_for_target(target, raw_df):
             y_pred = model.predict(X_test_use)
 
         cm = confusion_matrix(y_test, y_pred)
-        plot_confusion_matrix(cm, model_name, name, output_dir)
+        _plot_one(cm, model_name, output_dir, class_names)
 
-    print(f"Confusion matrices for {name} saved to {output_dir}/\n")
-
-
-def main():
-    raw_df = pd.read_csv(DATA_PATH)
-    for target in TARGETS:
-        print(f"=== {target['name']} ===")
-        run_for_target(target, raw_df)
-
-
-if __name__ == "__main__":
-    main()
+    print(f"All confusion matrices saved to {output_dir}/")

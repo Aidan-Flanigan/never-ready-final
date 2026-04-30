@@ -39,78 +39,17 @@ def run_classification_models(
     results_csv="data/model_results.csv"
 ):
     """
-    Runs logistic regression, LASSO CV, decision tree, random forest,
-    gradient boosting, and optional Bernoulli Naive Bayes for a binary
-    classification target.
-
-    If tune_threshold=True, thresholds are tuned using cross-validation
-    inside the training set only. The test set is used only for final evaluation.
-
-    Parameters
-    ----------
-    df : pandas DataFrame
-        Dataset containing target and predictors.
-
-    target_col : str
-        Binary target column, coded 0/1.
-
-    predictor_vars : list
-        Main predictor variables used for logistic/tree/random forest models.
-
-    nb_vars : list or None
-        Binary variables for Bernoulli Naive Bayes.
-        If None, Naive Bayes is skipped.
-
-    raw_missing_map : dict or None
-        Dictionary for special missing values.
-        Example: {"SUBKNOWL1": [-1], "SAVINGSRANGES": [98, 99]}
-
-    target_name : str or None
-        Printed name for target. Defaults to target_col.
-
-    test_size : float
-        Test set share.
-
-    random_state : int
-        Random seed.
-
-    threshold : float
-        Default probability cutoff if threshold tuning is off.
-
-    thresholds : dict or None
-        Optional model-specific thresholds.
-
-    tune_threshold : bool
-        If True, tune threshold using cross-validation within training data.
-
-    threshold_metric : str
-        Metric used for threshold tuning.
-        Options: "balanced_accuracy", "f1", or "recall".
-
-    cv_threshold_folds : int
-        Number of CV folds used for threshold tuning.
-
-    results_csv : str
-        Path to save model comparison results.
-
-    Returns
-    -------
-    comparison : pandas DataFrame
-        Model comparison table.
-
-    fitted_models : dict
-        Dictionary of fitted model objects.
+    Train all classifiers on a binary target and return fitted models, the
+    held-out test set, and a comparison table. Threshold can be auto-tuned via
+    CV on the training set or supplied per model via `thresholds`.
     """
 
     if target_name is None:
         target_name = target_col
 
     df_model = df.copy()
-
-    # Keep only valid binary target observations
     df_model = df_model[df_model[target_col].isin([0, 1])].copy()
 
-    # Keep only predictors that exist
     missing_predictors = [col for col in predictor_vars if col not in df_model.columns]
     available_predictors = [col for col in predictor_vars if col in df_model.columns]
 
@@ -121,7 +60,6 @@ def run_classification_models(
     X = df_model[available_predictors].copy()
     y = df_model[target_col]
 
-    # Replace special missing codes with np.nan
     if raw_missing_map is not None:
         for col, missing_values in raw_missing_map.items():
             if col in X.columns:
@@ -149,34 +87,7 @@ def run_classification_models(
 
     def find_best_threshold(y_true, y_prob, metric="balanced_accuracy"):
         """
-        Find the probability threshold that gives the best validation performance.
-
-        This helper searches thresholds from 0.05 to 0.95 and picks the one
-        that maximizes the chosen metric. It should be used on validation or
-        cross-validation predictions, not directly on final test predictions.
-
-        Parameters
-        ----------
-        y_true : array-like
-            True binary labels, coded as 0/1.
-
-        y_prob : array-like
-            Predicted probabilities for the positive class, class 1.
-
-        metric : str
-            Metric used to choose the threshold.
-            Options:
-            - "balanced_accuracy"
-            - "f1"
-            - "recall"
-
-        Returns
-        -------
-        best_threshold : float
-            Threshold that maximizes the selected metric.
-
-        best_score : float
-            Best value of the selected metric.
+        Sweep thresholds in [0.05, 0.95] and return the one that maximizes `metric`.
         """
 
         candidate_thresholds = np.arange(0.05, 0.96, 0.01)
@@ -206,19 +117,15 @@ def run_classification_models(
 
     def evaluate_model(model, model_name, X_train_use, X_test_use):
         """
-        Fit model, optionally tune threshold using CV inside the training set,
-        then evaluate once on the untouched test set.
+        Fit, optionally CV-tune the threshold on the training set, then score once on the test set.
         """
 
-        # Default threshold
         model_threshold = threshold
         threshold_score = None
 
-        # Optional model-specific threshold
         if thresholds is not None:
             model_threshold = thresholds.get(model_name, threshold)
 
-        # Tune threshold using only training data
         if tune_threshold and hasattr(model, "predict_proba"):
             cv = StratifiedKFold(
                 n_splits=cv_threshold_folds,
@@ -240,10 +147,8 @@ def run_classification_models(
                 metric=threshold_metric
             )
 
-        # Fit final model on full training data
         model.fit(X_train_use, y_train)
 
-        # Final evaluation on test data
         if hasattr(model, "predict_proba"):
             y_prob = model.predict_proba(X_test_use)[:, 1]
             y_pred = (y_prob >= model_threshold).astype(int)
@@ -298,7 +203,6 @@ def run_classification_models(
 
         return model
 
-    # Model 1: Baseline Logistic Regression
     baseline_logit = make_pipeline(
         SimpleImputer(strategy="median"),
         StandardScaler(),
@@ -325,7 +229,6 @@ def run_classification_models(
     print("\nBaseline logistic regression coefficients:")
     print(coef_table)
 
-    # Model 2: LASSO Logistic Regression with CV
     lasso_cv = make_pipeline(
         SimpleImputer(strategy="median"),
         StandardScaler(),
@@ -369,7 +272,6 @@ def run_classification_models(
     print("\nBest C chosen by cross-validation:")
     print(lasso_logit.C_[0])
 
-    # Model 3: Decision Tree
     decision_tree = make_pipeline(
         SimpleImputer(strategy="median"),
         DecisionTreeClassifier(
@@ -397,7 +299,6 @@ def run_classification_models(
     print("\nDecision tree feature importance:")
     print(tree_importance)
 
-    # Model 4: Random Forest
     random_forest = make_pipeline(
         SimpleImputer(strategy="median"),
         RandomForestClassifier(
@@ -426,7 +327,7 @@ def run_classification_models(
     print("\nRandom forest feature importance:")
     print(rf_importance)
 
-    # Model 5: Bernoulli Naive Bayes
+    available_nb_vars = []
     if nb_vars is not None:
         missing_nb_vars = [col for col in nb_vars if col not in df_model.columns]
         available_nb_vars = [col for col in nb_vars if col in df_model.columns]
@@ -460,7 +361,6 @@ def run_classification_models(
         else:
             print("\nSkipping Naive Bayes because no valid nb_vars were found.")
 
-    # Model 6: Gradient Boosting
     gradient_boosting = make_pipeline(
         SimpleImputer(strategy="median"),
         GradientBoostingClassifier(
@@ -489,7 +389,6 @@ def run_classification_models(
     print("\nGradient boosting feature importance:")
     print(gb_importance)
     
-    # Model 7: CatBoost
     catboost_model = CatBoostClassifier(
         iterations=300,
         learning_rate=0.05,
@@ -516,10 +415,16 @@ def run_classification_models(
     print("\nCatBoost feature importance:")
     print(importance)
  
-    # Final comparison
     comparison = pd.DataFrame(results).sort_values("roc_auc", ascending=False)
 
     print("\n================ Final Model Comparison ================")
     print(comparison.round(3))
 
-    return comparison, fitted_models
+    return {
+        "comparison": comparison,
+        "fitted_models": fitted_models,
+        "X_test": X_test,
+        "y_test": y_test,
+        "available_predictors": available_predictors,
+        "available_nb_vars": available_nb_vars,
+    }
