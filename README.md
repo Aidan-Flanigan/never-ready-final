@@ -242,11 +242,9 @@ This threshold captures a meaningful distinction between financially vulnerable 
 
 We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
 
-Overall, model performance is relatively similar across approaches, with ROC AUC values ranging from approximately 0.71 to 0.75. Gradient Boosting and CatBoost achieve the highest accuracy (around 0.71–0.72), while logistic regression and random forest provide more balanced performance across precision, recall, and F1 score.
+Overall, model performance is relatively similar across approaches, with ROC AUC values ranging from approximately 0.71 to 0.75. Random Forest has the highest accuracy of ~0.633 while LASSO Logistic Regression and and base Logistic Regression achieve the second best accuracy ~0.60. Similarly Random forest marginally preforemed better in percision than LASSO Logistic Regression and and base Logistic Regression. Notably, the reverse is true for balanced_accuracy scores between the three models.
 
-Decision trees show higher recall but lower precision, indicating they tend to over-predict higher savings. In contrast, CatBoost and Gradient Boosting achieve higher precision but lower recall, meaning they are more conservative in identifying households with higher savings.
-
-These results suggest that while more flexible machine learning models provide slight improvements, the predictive power of financial knowledge variables alone is moderate.
+Decision trees show higher recall but lower precision, indicating they tend to over-predict higher savings. In contrast, CatBoost and Gradient Boosting achieve highe precision but lower recall, meaning they are more conservative in identifying households with higher savings.
 
 
 - ROC AUC visualization
@@ -258,8 +256,6 @@ These results suggest that while more flexible machine learning models provide s
 Gradient Boosting and CatBoost performed similarly well, but Logistic Regression achieved the highest ROC AUC and F1 score overall.
 
 Although models like Gradient Boosting and CatBoost performed competitively, Logistic Regression ultimately provided the best balance of precision and recall, as reflected in its superior F1 score and ROC AUC. This suggests that a simpler linear model was sufficient for capturing the underlying structure of the data.
-
-- Feature importances (maybe)
 
 ### Financial Volatility
 
