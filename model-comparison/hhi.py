@@ -48,11 +48,12 @@ comparison, fitted_models = run_classification_models(
     predictor_vars=knowledge_vars,
     nb_vars=nb_vars,
     raw_missing_map={"SUBKNOWL1": [-1]},
-    target_name="low_fpl",
+    target_name="low_HHI",
     test_size=0.25,
     random_state=42,
     tune_threshold=True,
-    threshold_metric="balanced_accuracy"
+    threshold_metric="balanced_accuracy",
+    results_csv = "data/low_HHI_results.csv"
 )
 
 print("testing models with high_fpl")
@@ -62,9 +63,11 @@ comparison, fitted_models = run_classification_models(
     predictor_vars=knowledge_vars,
     nb_vars=nb_vars,
     raw_missing_map={"SUBKNOWL1": [-1]},
-    target_name="high_fpl",
+    target_name="high_HHI",
     test_size=0.25,
     random_state=42,
     tune_threshold=True,
-    threshold_metric="balanced_accuracy"
+    threshold_metric="balanced_accuracy",
+    results_csv = "data/high_HHI_results.csv"
+
 )
