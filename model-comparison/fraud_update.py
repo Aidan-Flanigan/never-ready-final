@@ -57,5 +57,6 @@ comparison, fitted_models = run_classification_models(
     target_name="fraud",
     test_size=0.25,
     random_state=42,
-    thresholds=thresholds
+    tune_threshold=True,
+    threshold_metric="balanced_accuracy"
 )
