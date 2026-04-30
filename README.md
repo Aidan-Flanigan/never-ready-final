@@ -99,7 +99,16 @@ The target variable is constructed as a binary indicator:
 This threshold captures a meaningful distinction between financially vulnerable households and those with at least minimal savings capacity.
 
 - Model comparison table
-<img src="data/savings_table.png" width="600">
+
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
+| LASSO Logistic Regression with CV | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
+| Decision Tree | 0.40 | 0.5694 | 0.7184 | 0.6505 | 0.4177 | 0.8762 | 0.5657 |
+| Random Forest | 0.45 | 0.6326 | 0.7415 | 0.6819 | 0.4587 | 0.8190 | 0.5880 |
+| Bernoulli Naive Bayes | 0.21 | 0.5877 | 0.7105 | 0.6501 | 0.4256 | 0.8238 | 0.5612 |
+| Gradient Boosting | 0.26 | 0.6265 | 0.7462 | 0.6794 | 0.4542 | 0.8262 | 0.5861 |
+| CatBoost | 0.26 | 0.6220 | 0.7427 | 0.6766 | 0.4508 | 0.8286 | 0.5839 |
 
 <img src="visuals/plots/savings_comparison.png" width="500">
 
@@ -111,15 +120,6 @@ Decision trees show higher recall but lower precision, indicating they tend to o
 
 These results suggest that while more flexible machine learning models provide slight improvements, the predictive power of financial knowledge variables alone is moderate.
 
-| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
-|-------|-----------|----------|---------|-------------------|-----------|--------|----|
-| Baseline Logistic Regression | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
-| LASSO Logistic Regression with CV | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
-| Decision Tree | 0.40 | 0.5694 | 0.7184 | 0.6505 | 0.4177 | 0.8762 | 0.5657 |
-| Random Forest | 0.45 | 0.6326 | 0.7415 | 0.6819 | 0.4587 | 0.8190 | 0.5880 |
-| Bernoulli Naive Bayes | 0.21 | 0.5877 | 0.7105 | 0.6501 | 0.4256 | 0.8238 | 0.5612 |
-| Gradient Boosting | 0.26 | 0.6265 | 0.7462 | 0.6794 | 0.4542 | 0.8262 | 0.5861 |
-| CatBoost | 0.26 | 0.6220 | 0.7427 | 0.6766 | 0.4508 | 0.8286 | 0.5839 |
 
 - ROC AUC visualization
 <img src="visuals/plots/savings_roc_auc.png" width="600">
