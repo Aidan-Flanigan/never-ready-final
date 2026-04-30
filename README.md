@@ -79,14 +79,31 @@ The data are split into a training set and a held-out test set. When threshold t
 
 ### Financial Volatility
 
+In the survey, volatility was assessed by asking respondants the following question:
+
+Which of the following best describes how your household’s income changes from month to month, if at
+all?
+1. Roughly the same each month
+2. Roughly the same most months, but some unusually high or low months during the year
+3. Often varies quite a bit from one month to the next
+
+The variable was coded into a binary stable finances variable, where response codes 1, 2 were considered stable (equaled to 1) and response code 3 was considered unstable (equaled to 0). The following are the results:
+
 - Model comparison table
+
+<img src="visuals/tables/compar_table_volatility.png" width="400">
+
+Between the models, all of them performed within a similar range, but Random Forest performed best in terms of ROC AUC (0.7039) and balanced accuracy (0.6536) while retaining similar results to other models in terms of precision, recall, etc.
 
 - ROC AUC visualization
 
+<img src="visuals/plots/volatility_roc_auc.png" width="400">
+
 - Confusion matrix for recommended/best model
 
-- Feature importances (maybe)
+<img src="visuals/plots/volatility_confusion_matrices/cm_random_forest.png" width="400">
 
+- Feature importances (maybe)
 
 ## V. Recommended Model(s) and Conclusions
 
