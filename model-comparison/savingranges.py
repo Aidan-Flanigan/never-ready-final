@@ -37,7 +37,8 @@ tuned_thresholds = {
     "Decision Tree": 0.40,
     "Random Forest": 0.45,
     "Bernoulli Naive Bayes": 0.21,
-    "Gradient Boosting": 0.26
+    "Gradient Boosting": 0.26,
+    "CatBoost": 0.26 
 }
 
 comparison, fitted_models = run_classification_models(
@@ -49,7 +50,7 @@ comparison, fitted_models = run_classification_models(
     target_name="Has Savings ($500+)",
     test_size=0.25,
     random_state=42,
-    thresholds=tuned_thresholds,
     tune_threshold=False,
+    threshold_metric="f1",
     results_csv="data/savings_results.csv"
 )

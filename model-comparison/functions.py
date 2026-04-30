@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import BernoulliNB
+from catboost import CatBoostClassifier
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -487,7 +488,34 @@ def run_classification_models(
 
     print("\nGradient boosting feature importance:")
     print(gb_importance)
+    
+    # Model 7: CatBoost
+    catboost_model = CatBoostClassifier(
+        iterations=300,
+        learning_rate=0.05,
+        depth=4,
+        loss_function="Logloss",
+        eval_metric="AUC",
+        random_seed=random_state,
+        verbose=False,
+        allow_writing_files=False
+    )
 
+    catboost_model = evaluate_model(
+        catboost_model,
+        "CatBoost",
+        X_train,
+        X_test
+    )
+
+    importance = pd.DataFrame({
+        "variable": available_predictors,
+        "importance": catboost_model.get_feature_importance()
+    }).sort_values("importance", ascending=False)
+
+    print("\nCatBoost feature importance:")
+    print(importance)
+ 
     # Final comparison
     comparison = pd.DataFrame(results).sort_values("roc_auc", ascending=False)
 
