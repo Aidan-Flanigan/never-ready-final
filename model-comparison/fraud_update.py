@@ -1,5 +1,5 @@
 import pandas as pd
-from functions import run_classification_models
+from functions_copy import run_classification_models
 
 # Load data
 df = pd.read_csv("data/data.csv")
@@ -58,5 +58,6 @@ comparison, fitted_models = run_classification_models(
     test_size=0.25,
     random_state=42,
     tune_threshold=True,
-    threshold_metric="balanced_accuracy"
+    threshold_metric="balanced_accuracy",
+    results_csv="data/fraud_results.csv"
 )
