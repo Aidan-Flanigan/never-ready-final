@@ -281,6 +281,8 @@ The variable was coded into a binary stable finances variable, where response co
 | Gradient Boosting | 0.94 | 0.6304 | 0.6795 | 0.6100 | 0.9561 | 0.6335 | 0.7621 |
 | CatBoost | 0.95 | 0.5616 | 0.6510 | 0.6000 | 0.9569 | 0.5558 | 0.7032 |
 
+Between the models, all of them performed within a similar range, but Random Forest performed best in terms of ROC AUC (0.7039) and balanced accuracy (0.6536) while retaining comparable results to other models in terms of precision, recall, etc. to other models, indicating it has similar performance in identifying stable households.
+
 - ROC AUC visualization
 
 <img src="visuals/plots/volatility_roc_auc.png" width="400">
