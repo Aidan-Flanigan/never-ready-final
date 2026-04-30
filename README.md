@@ -125,13 +125,13 @@ Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balan
 LASSO retained 14 of the 15 financial-knowledge predictors, eliminating only `KH5correct` (best regularization strength `C = 0.034`). Every retained coefficient is negative, which is the expected direction since the target is coded as `1 = below 200% FPL`: answering more knowledge items correctly is associated with a lower predicted probability of being in the low-FPL group. Self-assessed financial knowledge (`SUBKNOWL1`) is the strongest single predictor by magnitude, closely followed by the first three Knoll-Houts items (`KH1`, `KH2`, `KH3`), which together drive most of the model's signal. Numeracy items (`ON1`, `ON2`) and the Lusardi-Mitchell "Big Three" items (`FK1`, `FK2`, `FK3`) carry noticeably smaller weights, suggesting that, conditional on the broader Knoll-Houts battery and self-assessed knowledge, those classic literacy questions add relatively little marginal predictive power for poverty status.
 
 ### Fraud Exposure
-This section examines whether the selected features can predict whether a transaction is fraudulent. The motivation is that fraudulent transactions represent a direct financial loss to institutions and customers alike, and early detection is critical to minimizing exposure, preserving trust, and enabling timely intervention.
+This section examines whether the selected features can predict whether an individual is a victim of fraud. The motivation is that fraudulent transactions represent a direct financial loss to institutions and customers alike, and early detection is critical to minimizing exposure, preserving trust, and enabling timely intervention.
 The target variable is constructed as a binary indicator:
 
 0 = Transaction is legitimate  
 1 = Transaction is fraudulent
 
-This threshold separates normal account activity from transactions that warrant investigation or immediate action, making recall on the positive class the primary performance objective.
+This classification separates individuals with no reported fraud experience from those who have been victimized, making recall on the positive class the primary performance objective. In this context, failing to identify a fraud victim (false negative) means missing an opportunity for intervention, while falsely flagging a non-victim (false positive) is generally less costly.
 
 - Model comparison table
 
