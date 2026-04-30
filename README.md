@@ -14,6 +14,24 @@ Our analysis focuses on whether financial knowledge measures can predict several
 
 A more detailed description of the dataset, survey design, variable definitions, and codingA more detailed description of the dataset, survey design, variable definitions, and coding rules can be found in the official CFPB documentation and codebook, saved in this repository as `data/user_guide.pdf`.
 
+### Variable Questions to Obtain Data  
+FK1correct - Understanding of compound interest  
+FK2correct - Understanding of inflation and return on savings  
+FK3correct - Understanding of stock vs mutual fund volatility  
+KH1correct - Understanding of long-term returns on investment  
+KH2correct - Understanding of stocks vs bond vs savings volatility  
+KH3correct - Understanding the benefits of diversification  
+KH4correct - Understanding of possibility of stock market losses  
+KH5correct - Understanding of life insurance  
+KH6correct - Understanding of possibility of housing market losses  
+KH7correct - Understanding of credit card minimum payments  
+KH8correct - Understanding of relationship of bonds and interest rates  
+KH9correct - Understanding of mortgage term length on total interest paid  
+ON1correct - "Which of the following represents the biggest risk of getting a disease?"  
+ON2correct - “In the Bingo Lottery, the
+chance of winning a $10 prize is 1%. What is your best guess about how many people will win a $10 prize if 1,000 people each buy a single ticket for the Bingo Lottery?”  
+SUBKNOWL1 - "How would you assess your overall financial knowledge?"  
+
 ### Limitations of Data
 
 The data are cross-sectional, so the models should be interpreted as predictive rather than causal. The survey measures associations between financial knowledge and financial vulnerability, but it cannot prove that financial knowledge causes better or worse financial outcomes. Some variables are self-reported, which may introduce measurement error or recall bias, especially for sensitive topics such as income, savings, and fraud exposure. The dataset also includes nonsubstantive response codes such as refusal, “don’t know,” and “prefer not to say,” so these values need to be handled carefully during cleaning. Finally, this project mainly uses financial knowledge variables as predictors, so the models intentionally leave out many potentially important factors such as demographics, employment, household structure, and broader financial behavior.
