@@ -263,6 +263,16 @@ Although models like Gradient Boosting and CatBoost performed competitively, Log
 
 ### Financial Volatility
 
+In the survey, volatility was assessed by asking respondents the following question:
+
+Which of the following best describes how your household’s income changes from month to month, if at
+all?
+1. Roughly the same each month
+2. Roughly the same most months, but some unusually high or low months during the year
+3. Often varies quite a bit from one month to the next
+
+The variable was coded into a binary stable finances variable, where response codes 1, 2 were considered stable (equaled to 1) and response code 3 was considered unstable (equaled to 0). The following are the results:
+
 - Model comparison table
 
 | Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
@@ -277,10 +287,17 @@ Although models like Gradient Boosting and CatBoost performed competitively, Log
 
 - ROC AUC visualization
 
+<img src="visuals/plots/volatility_roc_auc.png" width="400">
+
 - Confusion matrix for recommended/best model
 
-- Feature importances (maybe)
+<img src="visuals/plots/volatility_confusion_matrices/cm_random_forest.png" width="400">
 
+The above confusion matrix and the high precision of the random forest model (0.9628) compared to the lower recall (0.6822) indicates the model is largely correct about nearly all of the households it categorizes as stable but tends to be conservative about classifying families as stable (as shown by the significant number of false negatives). This likely indicates that the performance and self-assessed ability on the finance and math skills is a strong predictor of household financial stability, but it cannot explain all of the variation since families can attain stability by having sufficient well through high-earning profession or inheriting wealth in their family/class.  
+
+- Feature importances
+
+For the random forest model, self-assessed ability accounted for approximately 19.4% of the predictive power, indicating that the majority is coming from their results on the financial and numerical assessments. The most important question in prediction (approximately 13.5%) was Knoll and Houts question 3, which was a basic question about whether spreading money between different assets increases or decreases risk. Being a necessary concept for understanding the value of responsible investing at all, this question having the highest predictive power indicates that the assessment in the model is a good proxy for how households think about investment and how their knowledge reflects in the output of their financial habits.
 
 ## V. Recommended Model(s) and Conclusions
 
