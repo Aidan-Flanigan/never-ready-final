@@ -102,7 +102,8 @@ Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balan
 <img src="visuals/plots/fraud_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
-<img src="visuals/plots/fraud_confusion_matrices/cm_bernoulli_naive_bayes.png.png" width="300">
+<img src="visuals/plots/fraud_confusion_matrices/cm_bernoulli_naive_bayes.png" width="300">
+For a fraud detection task, Bernoulli Naive Bayes stands out as the best-performing model across the metrics that matter most. It achieves the highest ROC-AUC score (0.5759), indicating it has the strongest overall ability to distinguish between fraudulent and legitimate transactions. More importantly, it leads all models in recall at 0.7488, meaning it successfully catches nearly 75% of actual fraud cases. This is especially important in fraud detection system where any missed fraud carries significant financial and reputational risk. It also posts the best F1 score (0.4527) and balanced accuracy (0.5581), confirming that its strong recall doesn't come entirely at the expense of other performance dimensions. The model does operate at a low decision threshold of 0.20, which results in lower precision and raw accuracy, meaning it generates more false positives than its competitors. However, in fraud detection this is a deliberate and defensible tradeoff since the cost of failing to catch a fraudulent transaction outweights the cost of flagging a legitimate one for secondary review, making a high-recall model the best choice if it's less precise.
 
 - Feature importances (maybe)
 
