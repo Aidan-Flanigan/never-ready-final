@@ -60,7 +60,7 @@ This threshold separates households that are clearly economically secure from th
 | Gradient Boosting | 0.19 | 0.6523 | 0.7671 | 0.7040 | 0.3880 | 0.8026 | 0.5232 |
 | CatBoost | 0.21 | 0.6798 | 0.7675 | 0.7085 | 0.4073 | 0.7632 | 0.5311 |
 
-<img src="visuals/plots/fpl_comparison.png" width="500">
+<img src="visuals/plots/fpl_comparison.png" width="600">
 
 We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
 
@@ -78,7 +78,7 @@ These results suggest that financial knowledge variables alone provide moderate 
 
 - Confusion matrix for recommended/best model
 
-<img src="visuals/plots/fpl_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="300">
+<img src="visuals/plots/fpl_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="600">
 
 Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balanced accuracy, those gains are tiny (on the order of 0.003 in AUC) and are achieved only by tuning the decision threshold down to roughly 0.2, which is a clear sign of probability miscalibration. **LASSO Logistic Regression with cross-validation is the recommended model** for predicting whether a household is below 200% of the Federal Poverty Level. It matches the boosting models on ROC AUC and balanced accuracy, produces calibrated probabilities at a near-default threshold (0.48), provides interpretable coefficients showing which knowledge items drive the prediction, and applies regularization to guard against overfitting. For an outcome where decision-makers may care about both the classification and the underlying probability of poverty risk, the simpler linear model is the more reliable choice.
 
@@ -127,7 +127,7 @@ This threshold separates normal account activity from transactions that warrant 
 | Gradient Boosting | 0.27 | 0.5014 | 0.5669 | 0.5474 | 0.3217 | 0.6564 | 0.4318 |
 | CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |  
 
-<img src="visuals/plots/fraud_comparison.png" width="500">  
+<img src="visuals/plots/fraud_comparison.png" width="600">  
 
 Across all seven models the precision scores are relatively consistent, ranging from 0.322 to 0.346, suggesting that the models perform similarly in terms of the proportion of true positive. The more meaningful variation appears in recall, where Bernoulli Naive Bayes stands out with a score of 0.749, achieved at a relatively low decision threshold of 0.20. This reflects a more aggressive classification strategy that prioritizes identifying positive cases, resulting in fewer false negatives but more false positives. This tradeoff contributes to its higher F1 score (0.453) and the highest ROC-AUC (0.576) among the models, though its accuracy (0.477) and balanced accuracy (0.558) are more modest, reflecting the cost of operating at a lower threshold.  
 
@@ -162,15 +162,15 @@ The model operates at a relatively low decision threshold of 0.20, which results
 | Gradient Boosting | 0.49 | 0.6579 | 0.7143 | 0.6565 | 0.6237 | 0.6398 | 0.6316 |
 | CatBoost | 0.51 | 0.6592 | 0.7146 | 0.6540 | 0.6382 | 0.5921 | 0.6143 |
 
-![High Household Income Comparison](visuals/plots/high_HHI_comparison.png)
+<img src="visuals/plots/high_HHI_comparison.png" width="600">
 
 - ROC AUC visualization
 
-![High HHI Income ROC AUC](visuals/plots/high_HHI_roc_auc.png)
+<img src="visuals/plots/high_HHI_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
 
-![High HHI Income Confusion Matrix](visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png)
+<img src="visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="600">
 
 - Feature importances (maybe)
 
@@ -190,11 +190,11 @@ The model operates at a relatively low decision threshold of 0.20, which results
 
 - ROC AUC visualization
 
-![Low HHI Income ROC AUC](visuals/plots/low_HHI_roc_auc.png)
+<img src="visuals/plots/low_HHI_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
 
-![Low HHI Income Confusion Matrix](visuals/plots/low_HHI_confusion_matrices/cm_random_forest.png)
+<img src="visuals/plots/low_HHI_confusion_matrices/cm_random_forest.png" width="600">
 
 
 - Feature importances
@@ -306,7 +306,7 @@ This threshold captures a meaningful distinction between financially vulnerable 
 | Gradient Boosting | 0.26 | 0.6265 | 0.7462 | 0.6794 | 0.4542 | 0.8262 | 0.5861 |
 | CatBoost | 0.26 | 0.6220 | 0.7427 | 0.6766 | 0.4508 | 0.8286 | 0.5839 |
 
-<img src="visuals/plots/savings_comparison.png" width="500">
+<img src="visuals/plots/savings_comparison.png" width="600">
 
 We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
 
@@ -319,7 +319,7 @@ Decision trees show higher recall but lower precision, indicating they tend to o
 <img src="visuals/plots/savings_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
-<img src="visuals/plots/savings_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="300">
+<img src="visuals/plots/savings_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="600">
 
 Gradient Boosting and CatBoost performed similarly well, but Logistic Regression achieved the highest ROC AUC and F1 score overall.
 
@@ -353,11 +353,11 @@ Between the models, all of them performed within a similar range, but Random For
 
 - ROC AUC visualization
 
-<img src="visuals/plots/volatility_roc_auc.png" width="400">
+<img src="visuals/plots/volatility_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
 
-<img src="visuals/plots/volatility_confusion_matrices/cm_random_forest.png" width="400">
+<img src="visuals/plots/volatility_confusion_matrices/cm_random_forest.png" width="600">
 
 The above confusion matrix and the high precision of the random forest model (0.9628) compared to the lower recall (0.6822) indicates the model is largely correct about nearly all of the households it categorizes as stable but tends to be conservative about classifying families as stable (as shown by the significant number of false negatives). This likely indicates that the performance and self-assessed ability on the finance and math skills is a strong predictor of household financial stability, but it cannot explain all of the variation since families can attain stability by having sufficient well through high-earning profession or inheriting wealth in their family/class.  
 
