@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("never-ready-final/data/data.csv")
+df = pd.read_csv("data/data.csv")
 
 # Keep valid responses
 df = df[~df["SAVINGSRANGES"].isin([98, 99])].copy()
@@ -9,7 +9,7 @@ df = df[~df["SAVINGSRANGES"].isin([98, 99])].copy()
 # Create binary target
 # 0 = $0–$499 (codes 1–5)
 # 1 = $500+ (codes 6+)
-df["has_savings"] = (df["SAVINGSRANGES"] >= 5).astype(int)
+df["has_savings"] = (df["SAVINGSRANGES"] >= 6).astype(int)
 
 print(df["has_savings"].value_counts(normalize=True))
 
@@ -31,17 +31,15 @@ nb_vars = [
     "ON1correct", "ON2correct"
 ]
 
-# Use thresholds learned from automatic tuning
 tuned_thresholds = {
-    "Baseline Logistic Regression": 0.38,
-    "LASSO Logistic Regression with CV": 0.38,
-    "Decision Tree": 0.33,
-    "Random Forest": 0.27,
-    "Bernoulli Naive Bayes": 0.27,
-    "Gradient Boosting": 0.39
+    "Baseline Logistic Regression": 0.43,
+    "LASSO Logistic Regression with CV": 0.43,
+    "Decision Tree": 0.40,
+    "Random Forest": 0.45,
+    "Bernoulli Naive Bayes": 0.21,
+    "Gradient Boosting": 0.26
 }
 
-# Run models using fixed tuned thresholds
 comparison, fitted_models = run_classification_models(
     df=df,
     target_col="has_savings",
@@ -53,5 +51,5 @@ comparison, fitted_models = run_classification_models(
     random_state=42,
     thresholds=tuned_thresholds,
     tune_threshold=False,
-    results_csv="never-ready-final/data/savings_results.csv"
+    results_csv="data/savings_results.csv"
 )
