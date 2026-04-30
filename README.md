@@ -82,7 +82,29 @@ These results suggest that financial knowledge variables alone provide moderate 
 
 Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balanced accuracy, those gains are tiny (on the order of 0.003 in AUC) and are achieved only by tuning the decision threshold down to roughly 0.2, which is a clear sign of probability miscalibration. **LASSO Logistic Regression with cross-validation is the recommended model** for predicting whether a household is below 200% of the Federal Poverty Level. It matches the boosting models on ROC AUC and balanced accuracy, produces calibrated probabilities at a near-default threshold (0.48), provides interpretable coefficients showing which knowledge items drive the prediction, and applies regularization to guard against overfitting. For an outcome where decision-makers may care about both the classification and the underlying probability of poverty risk, the simpler linear model is the more reliable choice.
 
-- Feature importances (maybe)
+- Feature importances
+
+#### LASSO CV Coefficients
+
+| Variable | Coefficient |
+|----------|-------------|
+| SUBKNOWL1 | -0.3536 |
+| KH1correct | -0.3051 |
+| KH2correct | -0.2533 |
+| KH3correct | -0.2417 |
+| KH4correct | -0.1716 |
+| KH9correct | -0.1619 |
+| KH8correct | -0.1553 |
+| KH6correct | -0.1307 |
+| FK3correct | -0.1274 |
+| FK2correct | -0.0798 |
+| ON2correct | -0.0618 |
+| FK1correct | -0.0570 |
+| ON1correct | -0.0269 |
+| KH7correct | -0.0008 |
+| KH5correct | 0.0000 |
+
+LASSO retained 14 of the 15 financial-knowledge predictors, eliminating only `KH5correct` (best regularization strength `C = 0.034`). Every retained coefficient is negative, which is the expected direction since the target is coded as `1 = below 200% FPL`: answering more knowledge items correctly is associated with a lower predicted probability of being in the low-FPL group. Self-assessed financial knowledge (`SUBKNOWL1`) is the strongest single predictor by magnitude, closely followed by the first three Knoll-Houts items (`KH1`, `KH2`, `KH3`), which together drive most of the model's signal. Numeracy items (`ON1`, `ON2`) and the Lusardi-Mitchell "Big Three" items (`FK1`, `FK2`, `FK3`) carry noticeably smaller weights, suggesting that, conditional on the broader Knoll-Houts battery and self-assessed knowledge, those classic literacy questions add relatively little marginal predictive power for poverty status.
 
 ### Fraud Exposure
 This section examines whether the selected features can predict whether a transaction is fraudulent. The motivation is that fraudulent transactions represent a direct financial loss to institutions and customers alike, and early detection is critical to minimizing exposure, preserving trust, and enabling timely intervention before harm compounds.
@@ -106,8 +128,10 @@ This threshold separates normal account activity from transactions that warrant 
 | CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |  
 
 <img src="visuals/plots/fraud_comparison.png" width="500">  
-Across all seven models the precision scores are relatively consistent, ranging from 0.322 to 0.346, suggesting that the models perform similarly in terms of the proportion of true positive. The more meaningful variation appears in recall, where Bernoulli Naive Bayes stands out with a score of 0.749, achieved at a relatively low decision threshold of 0.20. This reflects a more aggressive classification strategy that prioritizes identifying positive cases, resulting in fewer false negatives but more false positives. This tradeoff contributes to its higher F1 score (0.453) and the highest ROC-AUC (0.576) among the models, though its accuracy (0.477) and balanced accuracy (0.558) are more modest, reflecting the cost of operating at a lower threshold. 
-  
+
+Across all seven models the precision scores are relatively consistent, ranging from 0.322 to 0.346, suggesting that the models perform similarly in terms of the proportion of true positive. The more meaningful variation appears in recall, where Bernoulli Naive Bayes stands out with a score of 0.749, achieved at a relatively low decision threshold of 0.20. This reflects a more aggressive classification strategy that prioritizes identifying positive cases, resulting in fewer false negatives but more false positives. This tradeoff contributes to its higher F1 score (0.453) and the highest ROC-AUC (0.576) among the models, though its accuracy (0.477) and balanced accuracy (0.558) are more modest, reflecting the cost of operating at a lower threshold.  
+
+
 The tree-based and boosting models: Random Forest, Gradient Boosting, and CatBoost operate in the middle ground, with recall scores ranging from 0.656 to 0.701 and ROC-AUC values between 0.566 and 0.572. While these models achieve slightly higher overall accuracy than Naive Bayes, they underperform in terms of recall and F1 score, making them less suited for a fraud detection setting where identifying positive cases is the primary objective. The Decision Tree performs weakest overall, with the lowest recall (0.538), F1 score (0.408), and ROC-AUC (0.549) among the models, indicating limited ability to effectively distinguish between classes.  
 
 Logistic Regression and LASSO Logistic CV achieve the highest overall accuracy (0.545 and 0.517) and remain competitive in terms of ROC-AUC (both around 0.572), but their recall falls meaningfully below that of Bernoulli Naive Bayes. When prioritizing the identification of fraud cases, this difference in recall becomes especially important. Overall, the results suggest that Bernoulli Naive Bayes is the most suitable model under a recall-focused objective, as it performs best on the metrics most relevant to fraud detection.
@@ -117,13 +141,13 @@ Logistic Regression and LASSO Logistic CV achieve the highest overall accuracy (
 
 - Confusion matrix for recommended/best model
 <img src="visuals/plots/fraud_confusion_matrices/cm_bernoulli_naive_bayes.png" width="600">
+
 For a fraud detection task, Bernoulli Naive Bayes stands out as the strongest-performing model under a recall-focused objective. It achieves the highest ROC-AUC score (0.5759), suggesting slightly better overall ability to distinguish between fraudulent and legitimate transactions relative to the other models. More importantly, it leads all models in recall at 0.7488, meaning it successfully identifies nearly 75% of actual fraud cases. This is especially important in a fraud detection system, where missed fraud carries significant financial and reputational risk. It also achieves the highest F1 score (0.4527) and balanced accuracy (0.5581), indicating that its strong recall is not achieved entirely at the expense of overall performance.
   
 The model operates at a relatively low decision threshold of 0.20, which results in lower precision and raw accuracy, meaning it generates more false positives than competing models. However, in a fraud detection context, this represents a deliberate and defensible tradeoff, as the cost of failing to detect fraudulent activity outweighs the cost of incorrectly flagging legitimate transactions for further review. As a result, the high-recall model of Bernoulli Naive Bayes is better aligned with the fraud objectives, even at the expense of precision.
 
 ### Household Income
 
-### Household Income
 #### High Household Income 
 
 - Model comparison table
