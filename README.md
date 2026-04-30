@@ -408,7 +408,7 @@ Several extensions could address the limitations outlined above and improve both
 
 Second, the way the target variables are defined could be improved by trying different cutoff values or moving beyond simple binary outcomes. For example, using multiple categories or continuous measures would better capture differences in financial behavior and reduce sensitivity to arbitrary thresholds.
 
-On the modeling side, performance could be improved by more systematically tuning hyperparameters instead of relying on default settings. While the current approach already tunes classification thresholds, this could be expanded by evaluating models across multiple performance metrics or choosing thresholds that better reflect real-world decision tradeoffs. In addition, using stronger validation methods such as k-fold cross-validation or repeated train-test splits could provide more reliable estimates of how the models perform on new data.
+On the modeling side, performance could be improved by systematically tuning hyperparameters instead of relying on default settings. While the current approach already tunes classification thresholds, this could be expanded by evaluating models across multiple performance metrics or choosing thresholds that better reflect real-world decision tradeoffs. In addition, using stronger validation methods such as k-fold cross-validation or repeated train-test splits could provide more reliable estimates of how the models perform on new data.
 
 
 ## VII. Rerun Instructions
