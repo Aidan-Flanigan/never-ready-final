@@ -79,13 +79,141 @@ The data are split into a training set and a held-out test set. When threshold t
 
 ### Household Income
 
+### Household Income
+#### High Household Income 
+
 - Model comparison table
+
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.53 | 0.6610 | 0.7222 | 0.6600 | 0.6258 | 0.6480 | 0.6367 |
+| LASSO Logistic Regression with CV | 0.53 | 0.6610 | 0.7222 | 0.6600 | 0.6258 | 0.6480 | 0.6367 |
+| Decision Tree | 0.52 | 0.6648 | 0.6954 | 0.6613 | 0.6385 | 0.6194 | 0.6288 |
+| Random Forest | 0.52 | 0.6648 | 0.7204 | 0.6614 | 0.6381 | 0.6207 | 0.6293 |
+| Bernoulli Naive Bayes | 0.61 | 0.6529 | 0.7090 | 0.6522 | 0.6162 | 0.6439 | 0.6298 |
+| Gradient Boosting | 0.49 | 0.6579 | 0.7143 | 0.6565 | 0.6237 | 0.6398 | 0.6316 |
+| CatBoost | 0.51 | 0.6592 | 0.7146 | 0.6540 | 0.6382 | 0.5921 | 0.6143 |
+
+![High Household Income Comparison](visuals/plots/high_HHI_comparison.png)
 
 - ROC AUC visualization
 
+![High HHI Income ROC AUC](visuals/plots/high_HHI_roc_auc.png)
+
 - Confusion matrix for recommended/best model
 
+![High HHI Income Confusion Matrix](visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png)
+
 - Feature importances (maybe)
+
+#### Low Household Income
+
+- Model comparison table
+
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.45 | 0.6773 | 0.7572 | 0.6860 | 0.4603 | 0.7065 | 0.5575 |
+| LASSO Logistic Regression with CV | 0.45 | 0.6773 | 0.7572 | 0.6860 | 0.4603 | 0.7065 | 0.5575 |
+| Decision Tree | 0.52 | 0.7098 | 0.7247 | 0.6544 | 0.4959 | 0.5239 | 0.5095 |
+| Random Forest | 0.49 | 0.6892 | 0.7613 | 0.6956 | 0.4732 | 0.7109 | 0.5682 |
+| Bernoulli Naive Bayes | 0.18 | 0.6767 | 0.7483 | 0.6849 | 0.4596 | 0.7043 | 0.5562 |
+| Gradient Boosting | 0.24 | 0.6623 | 0.7584 | 0.6923 | 0.4488 | 0.7630 | 0.5652 |
+| CatBoost | 0.25 | 0.6748 | 0.7593 | 0.7005 | 0.4605 | 0.7609 | 0.5738 |
+
+- ROC AUC visualization
+
+![Low HHI Income ROC AUC](visuals/plots/low_HHI_roc_auc.png)
+
+- Confusion matrix for recommended/best model
+
+![Low HHI Income Confusion Matrix](visuals/plots/low_HHI_confusion_matrices/cm_random_forest.png)
+
+
+- Feature importances
+
+#### High_HHI
+
+##### LASSO CV Coefficients
+
+| Variable | Coefficient |
+|----------|-------------|
+| SUBKNOWL1 | 0.3100 |
+| KH8correct | 0.1980 |
+| KH9correct | 0.1948 |
+| KH1correct | 0.1798 |
+| KH2correct | 0.1502 |
+| KH3correct | 0.1390 |
+| ON2correct | 0.1207 |
+| ON1correct | 0.1053 |
+| KH4correct | 0.0928 |
+| KH6correct | 0.0770 |
+| FK3correct | 0.0753 |
+| FK1correct | 0.0695 |
+| FK2correct | 0.0573 |
+| KH7correct | 0.0288 |
+| KH5correct | 0.0159 |
+
+##### Random Forest Feature Importance
+
+| Variable | Importance |
+|----------|------------|
+| KH3correct | 0.1543 |
+| KH1correct | 0.1487 |
+| SUBKNOWL1 | 0.1447 |
+| KH2correct | 0.0986 |
+| ON2correct | 0.0874 |
+| FK2correct | 0.0738 |
+| KH8correct | 0.0702 |
+| KH9correct | 0.0686 |
+| KH4correct | 0.0332 |
+| FK3correct | 0.0321 |
+| FK1correct | 0.0302 |
+| ON1correct | 0.0217 |
+| KH6correct | 0.0188 |
+| KH7correct | 0.0113 |
+| KH5correct | 0.0062 |
+
+#### Low_HHI
+
+##### LASSO CV Coefficients
+
+| Variable | Coefficient |
+|----------|-------------|
+| KH5correct | -0.0080 |
+| KH7correct | -0.0385 |
+| FK2correct | -0.0453 |
+| ON2correct | -0.0726 |
+| ON1correct | -0.0797 |
+| FK1correct | -0.0870 |
+| KH6correct | -0.1140 |
+| FK3correct | -0.1341 |
+| KH4correct | -0.1564 |
+| KH8correct | -0.1754 |
+| KH2correct | -0.1828 |
+| KH9correct | -0.1845 |
+| KH1correct | -0.2101 |
+| KH3correct | -0.2269 |
+| SUBKNOWL1 | -0.4019 |
+
+##### Random Forest Feature Importance
+
+| Variable | Importance |
+|----------|------------|
+| KH3correct | 0.1800 |
+| SUBKNOWL1 | 0.1577 |
+| KH1correct | 0.1327 |
+| KH2correct | 0.1314 |
+| KH9correct | 0.0725 |
+| KH4correct | 0.0624 |
+| FK2correct | 0.0582 |
+| ON2correct | 0.0526 |
+| FK3correct | 0.0398 |
+| FK1correct | 0.0324 |
+| KH8correct | 0.0289 |
+| KH6correct | 0.0229 |
+| ON1correct | 0.0136 |
+| KH7correct | 0.0096 |
+| KH5correct | 0.0054 |
 
 ### Savings
 
