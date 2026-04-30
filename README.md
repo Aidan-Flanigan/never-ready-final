@@ -58,64 +58,47 @@ The data are split into a training set and a held-out test set. When threshold t
 - Feature importances (maybe)
 
 ### Household Income
-#### High Household Income 
 
 - Model comparison table
 
-| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
-|-------|-----------|----------|---------|-------------------|-----------|--------|----|
-| Baseline Logistic Regression | 0.53 | 0.6610 | 0.7222 | 0.6600 | 0.6258 | 0.6480 | 0.6367 |
-| LASSO Logistic Regression with CV | 0.53 | 0.6610 | 0.7222 | 0.6600 | 0.6258 | 0.6480 | 0.6367 |
-| Decision Tree | 0.52 | 0.6648 | 0.6954 | 0.6613 | 0.6385 | 0.6194 | 0.6288 |
-| Random Forest | 0.52 | 0.6648 | 0.7204 | 0.6614 | 0.6381 | 0.6207 | 0.6293 |
-| Bernoulli Naive Bayes | 0.61 | 0.6529 | 0.7090 | 0.6522 | 0.6162 | 0.6439 | 0.6298 |
-| Gradient Boosting | 0.49 | 0.6579 | 0.7143 | 0.6565 | 0.6237 | 0.6398 | 0.6316 |
-| CatBoost | 0.51 | 0.6592 | 0.7146 | 0.6540 | 0.6382 | 0.5921 | 0.6143 |
-
-![High Household Income Comparison](visuals/plots/high_HHI_comparison.png)
-
 - ROC AUC visualization
 
-![High HHI Income ROC AUC](visuals/plots/high_HHI_roc_auc.png)
-
 - Confusion matrix for recommended/best model
-
-![High HHI Income Confusion Matrix](visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png)
-
-- Feature importances (maybe)
-
-#### Low Household Income
-
-- Model comparison table
-
-| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
-|-------|-----------|----------|---------|-------------------|-----------|--------|----|
-| Baseline Logistic Regression | 0.45 | 0.6773 | 0.7572 | 0.6860 | 0.4603 | 0.7065 | 0.5575 |
-| LASSO Logistic Regression with CV | 0.45 | 0.6773 | 0.7572 | 0.6860 | 0.4603 | 0.7065 | 0.5575 |
-| Decision Tree | 0.52 | 0.7098 | 0.7247 | 0.6544 | 0.4959 | 0.5239 | 0.5095 |
-| Random Forest | 0.49 | 0.6892 | 0.7613 | 0.6956 | 0.4732 | 0.7109 | 0.5682 |
-| Bernoulli Naive Bayes | 0.18 | 0.6767 | 0.7483 | 0.6849 | 0.4596 | 0.7043 | 0.5562 |
-| Gradient Boosting | 0.24 | 0.6623 | 0.7584 | 0.6923 | 0.4488 | 0.7630 | 0.5652 |
-| CatBoost | 0.25 | 0.6748 | 0.7593 | 0.7005 | 0.4605 | 0.7609 | 0.5738 |
-
-- ROC AUC visualization
-
-![Low HHI Income ROC AUC](visuals/plots/low_HHI_roc_auc.png)
-
-- Confusion matrix for recommended/best model
-
-![Low HHI Income Confusion Matrix](visuals/plots/low_HHI_confusion_matrices/cm_random_forest.png)
-
 
 - Feature importances (maybe)
 
 ### Savings
 
+This section examines whether financial knowledge measures can predict if a household has at least $500 in savings. The motivation is that savings represent a key component of financial resilience, as even small savings buffers can help households absorb unexpected financial shocks.
+
+The target variable is constructed as a binary indicator:
+
+* 0 = Household has less than $500 in savings
+* 1 = Household has $500 or more in savings
+
+This threshold captures a meaningful distinction between financially vulnerable households and those with at least minimal savings capacity.
+
 - Model comparison table
+<img src="data/savings_table.png" width="600">
+<img src="visuals/plots/savings_comparison.png" width="300">
+
+We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
+
+Overall, model performance is relatively similar across approaches, with ROC AUC values ranging from approximately 0.71 to 0.75. Gradient Boosting and CatBoost achieve the highest accuracy (around 0.71–0.72), while logistic regression and random forest provide more balanced performance across precision, recall, and F1 score.
+
+Decision trees show higher recall but lower precision, indicating they tend to over-predict higher savings. In contrast, CatBoost and Gradient Boosting achieve higher precision but lower recall, meaning they are more conservative in identifying households with higher savings.
+
+These results suggest that while more flexible machine learning models provide slight improvements, the predictive power of financial knowledge variables alone is moderate.
 
 - ROC AUC visualization
+<img src="visuals/savings_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
+<img src="visuals/plots/savings_confusion_matrices/cm_decision_tree.png" width="300">
+
+Gradient Boosting and CatBoost performed similarly well, but Logistic Regression achieved the highest ROC AUC and F1 score overall.
+
+Although models like Gradient Boosting and CatBoost performed competitively, Logistic Regression ultimately provided the best balance of precision and recall, as reflected in its superior F1 score and ROC AUC. This suggests that a simpler linear model was sufficient for capturing the underlying structure of the data.
 
 - Feature importances (maybe)
 
