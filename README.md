@@ -105,3 +105,8 @@ On the modeling side, performance could be improved by more systematically tunin
 
 
 ## VII. Rerun Instructions
+1. Open the project folder that contains your model-comparison folder and the data.csv.
+2. Ensure the dataset is saved to the same directory as outlined in the code (data/data.csv) or adjust depending on your setup.
+3. Install the required packages [pip install scikit-learn pandas numpy catboost matplotlib]
+4. Run all targets to train and evaluate models across all six classification problems by running run.py.
+5. Ensure the outputs of run.py are saved in csv format to the assigned 'data' folder and the visualizations assigned to the 'visuals/plots' folder unless indicated otherwise
