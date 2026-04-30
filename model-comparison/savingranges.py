@@ -50,7 +50,7 @@ comparison, fitted_models = run_classification_models(
     target_name="Has Savings ($500+)",
     test_size=0.25,
     random_state=42,
-    tune_threshold=False,
+    tune_threshold=True,
     threshold_metric="f1",
     results_csv="data/savings_results.csv"
 )
