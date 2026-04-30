@@ -148,6 +148,9 @@ The model operates at a relatively low decision threshold of 0.20, which results
 
 ### Household Income
 
+Household Income falls into 9 categories, ranging from 1 (under $10,000) to 9 ($150,000 and above). When trained on unclustered results, no model had a greater accuracy than 0.21, compared to a random chance of 0.11. While this is an improvement over random chance, this doesn't say a lot about how accurate the model is overall.
+To fix this, household income categories have been clustered into thirds. Low_HHI = $0 to $39,999, and high_HHI = $75,000 or more. Since the median household income in the U.S. was roughly $61,000, this allows for meaningful distinguishment between a low/high-income household and a "close to median" household, where the differences may be more pronounced. 
+
 #### High Household Income 
 
 - Model comparison table
@@ -172,7 +175,7 @@ The model operates at a relatively low decision threshold of 0.20, which results
 
 <img src="visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="600">
 
-- Feature importances (maybe)
+Note: the models performed so similarly across confusion matrices that it's almost arbitrary to pick.
 
 #### Low Household Income
 
@@ -188,6 +191,8 @@ The model operates at a relatively low decision threshold of 0.20, which results
 | Gradient Boosting | 0.24 | 0.6623 | 0.7584 | 0.6923 | 0.4488 | 0.7630 | 0.5652 |
 | CatBoost | 0.25 | 0.6748 | 0.7593 | 0.7005 | 0.4605 | 0.7609 | 0.5738 |
 
+Model performance for low household income follows a similar pattern to high hosuehold income, with slightly stronger ROC AUC. However, model precision underperforms in comparison to higher income households, while recall is marginally higher. Baseline and LASSO models produce identical results, meaning none of the variables were dropped for redundancy. 
+
 - ROC AUC visualization
 
 <img src="visuals/plots/low_HHI_roc_auc.png" width="600">
@@ -198,6 +203,7 @@ The model operates at a relatively low decision threshold of 0.20, which results
 
 
 - Feature importances
+
 
 #### High_HHI
 
@@ -282,6 +288,8 @@ The model operates at a relatively low decision threshold of 0.20, which results
 | ON1correct | 0.0136 |
 | KH7correct | 0.0096 |
 | KH5correct | 0.0054 |
+
+Given these results, we can say that there is some correlation, however it's ultimately clear that answering financial literacy questions correctly has limited predictive value on household income. 
 
 ### Savings
 
