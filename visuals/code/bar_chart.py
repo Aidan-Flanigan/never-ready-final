@@ -5,13 +5,13 @@ import matplotlib.ticker as mticker
 import numpy as np
 
 # ── Config ────────────────────────────────────────────────────────────────
-CSV_PATH = "data/fraud_results.csv"   # change to your CSV path
-OUTPUT_PATH = "visuals/plots/fraud_comparison.png"  # set to None to just show the chart
+CSV_PATH = "data/savings_results.csv"   # change to your CSV path
+OUTPUT_PATH = "visuals/plots/savings_comparison.png"  # set to None to just show the chart
 METRICS = ["precision", "recall", "f1", "accuracy"]
 METRIC_LABELS = {"precision": "Precision", "recall": "Recall", "f1": "F1", "accuracy": "Accuracy"}
 # ─────────────────────────────────────────────────────────────────────────
 
-df = pd.read_csv("data/fraud_results.csv")
+df = pd.read_csv("data/savings_results.csv")
 
 # Shorten model names for readability on the axis
 short_names = {

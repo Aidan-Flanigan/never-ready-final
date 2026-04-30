@@ -20,17 +20,17 @@ from functions import run_classification_models
 
 # ── Config ────────────────────────────────────────────────────────────────
 DATA_PATH   = "data/data.csv"
-OUTPUT_DIR  = "visuals/plots/fraud_confusion_matrices.png"
-TARGET_COL  = "fraud"
-TARGET_NAME = "fraud"
+OUTPUT_DIR  = "visuals/plots/fpl_confusion_matrices.png"
+TARGET_COL  = "low_fpl"
+TARGET_NAME = "low_fpl"
 # ─────────────────────────────────────────────────────────────────────────
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Load and prep data
 df = pd.read_csv(DATA_PATH)
-df = df[df["FRAUD2"].isin([0, 1])].copy()
-df["fraud"] = df["FRAUD2"].astype(int)
+df = df[df["fpl"].isin([1, 2, 3])].copy()
+df["low_fpl"] = df["fpl"].isin([1, 2]).astype(int)
 
 knowledge_vars = [
     "FK1correct", "FK2correct", "FK3correct",
