@@ -91,7 +91,7 @@ The variable was coded into a binary stable finances variable, where response co
 
 - Model comparison table
 
-<img src="visuals/tables/compar_table_volatility.png" width="500">
+<img src="visuals/tables/compar_table_volatility.png" width="600">
 
 Between the models, all of them performed within a similar range, but Random Forest performed best in terms of ROC AUC (0.7039) and balanced accuracy (0.6536) while retaining comparable results to other models in terms of precision, recall, etc. to other models, indicating it has similar performance in identifying stable households.
 
