@@ -72,8 +72,10 @@ The data are split into a training set and a held-out test set. When threshold t
 | CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |
 
 - ROC AUC visualization
+<img src="visuals/plots/fraud_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
+<img src="visuals/plots/fraud_confusion_matrices/cm_bernoulli_naive_bayes.png.png" width="300">
 
 - Feature importances (maybe)
 
@@ -316,6 +318,6 @@ On the modeling side, performance could be improved by more systematically tunin
 ## VII. Rerun Instructions
 1. Open the project folder that contains your model-comparison folder and the data.csv.
 2. Ensure the dataset is saved to the same directory as outlined in the code (data/data.csv) or adjust depending on your setup.
-3. Install the required packages [pip install scikit-learn pandas numpy catboost matplotlib]
+3. Install the required packages as outlined in requirements.txt
 4. Run all targets to train and evaluate models across all six classification problems by running run.py.
 5. Ensure the outputs of run.py are saved in csv format to the assigned 'data' folder and the visualizations assigned to the 'visuals/plots' folder unless indicated otherwise
