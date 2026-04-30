@@ -58,6 +58,6 @@ comparison, fitted_models = run_classification_models(
     test_size=0.25,
     random_state=42,
     tune_threshold=True,
-    threshold_metric="balanced_accuracy"
+    threshold_metric="f1"
 )
 
