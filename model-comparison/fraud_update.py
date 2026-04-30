@@ -1,5 +1,5 @@
 import pandas as pd
-from functions_copy import run_classification_models
+from functions import run_classification_models
 
 # Load data
 df = pd.read_csv("data/data.csv")

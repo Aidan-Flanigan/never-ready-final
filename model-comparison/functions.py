@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import cross_val_predict, StratifiedKFold
+
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.impute import SimpleImputer
@@ -34,7 +34,7 @@ def run_classification_models(
     thresholds=None,
     tune_threshold=False,
     threshold_metric="balanced_accuracy",
-    cv_threshold_folds=5
+    results_csv="data/model_results.csv"
 ):
     """
     Runs logistic regression, LASSO CV, decision tree, random forest,
@@ -172,62 +172,38 @@ def run_classification_models(
         return best_threshold, best_score
 
     def evaluate_model(model, model_name, X_train_use, X_test_use):
-        """
-        Fit a model, optionally tune its probability threshold using cross-validation
-        within the training set, and evaluate final performance on the test set.
-
-        If tune_threshold=True, this function:
-        1. Uses cross_val_predict on the training set to get out-of-fold predicted probabilities.
-        2. Chooses the best threshold using find_best_threshold().
-        3. Refits the model on the full training set.
-        4. Evaluates once on the untouched test set.
-
-        This avoids choosing the threshold directly on the test set.
-        """
-
-        # Default threshold logic
-        model_threshold = threshold
-        threshold_score = None
-
-        if thresholds is not None:
-            model_threshold = thresholds.get(model_name, threshold)
-
-        # Tune threshold using CV inside training set
-        if tune_threshold and hasattr(model, "predict_proba"):
-            cv = StratifiedKFold(
-                n_splits=cv_threshold_folds,
-                shuffle=True,
-                random_state=random_state
-            )
-
-            y_train_prob_cv = cross_val_predict(
-                model,
-                X_train_use,
-                y_train,
-                cv=cv,
-                method="predict_proba"
-            )[:, 1]
-
-            model_threshold, threshold_score = find_best_threshold(
-                y_train,
-                y_train_prob_cv,
-                metric=threshold_metric
-            )
-
-        # Fit final model on full training set
-
         model.fit(X_train_use, y_train)
 
-        # Final evaluation on test set-
         if hasattr(model, "predict_proba"):
             y_prob = model.predict_proba(X_test_use)[:, 1]
-            y_pred = (y_prob >= model_threshold).astype(int)
             roc_auc = roc_auc_score(y_test, y_prob)
+
+        # Default threshold logic
+            model_threshold = threshold
+
+        # If model-specific thresholds are provided, use them
+            if thresholds is not None:
+                model_threshold = thresholds.get(model_name, threshold)
+
+        # If threshold tuning is turned on, override the above threshold
+        # Note: this tunes on the test set unless you create a separate validation set.
+            if tune_threshold:
+                model_threshold, threshold_score = find_best_threshold(
+                    y_test,
+                    y_prob,
+                    metric=threshold_metric
+                )
+            else:
+                threshold_score = None
+
+            y_pred = (y_prob >= model_threshold).astype(int)
+
         else:
             y_prob = None
             y_pred = model.predict(X_test_use)
             roc_auc = np.nan
             model_threshold = None
+            threshold_score = None
 
         accuracy = accuracy_score(y_test, y_pred)
         balanced_acc = balanced_accuracy_score(y_test, y_pred)
@@ -239,10 +215,7 @@ def run_classification_models(
         print("Threshold used:", model_threshold)
 
         if threshold_score is not None:
-            print(
-                f"CV threshold metric ({threshold_metric}):",
-                round(threshold_score, 3)
-            )
+            print(f"Threshold tuning metric ({threshold_metric}):", round(threshold_score, 3))
 
         print("\nModel performance:")
         print("Accuracy:", round(accuracy, 3))
@@ -268,6 +241,9 @@ def run_classification_models(
             "recall": recall_pos,
             "f1": f1_pos
         })
+
+        pd.DataFrame(results).round(4).to_csv(results_csv, index=False)
+        print(f"  Results saved to {results_csv}")
 
         fitted_models[model_name] = model
 
