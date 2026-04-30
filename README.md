@@ -211,6 +211,8 @@ Note: the models performed so similarly across confusion matrices that it's almo
 
 Model performance for low household income follows a similar pattern to high hosuehold income, with slightly stronger ROC AUC. However, model precision underperforms in comparison to higher income households, while recall is marginally higher. Baseline and LASSO models produce identical results, meaning none of the variables were dropped for redundancy. 
 
+<img src="visuals/plots/low_HHI_comparison.png" width="600">
+
 - ROC AUC visualization
 
 <img src="visuals/plots/low_HHI_roc_auc.png" width="600">
