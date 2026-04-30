@@ -1,0 +1,7 @@
+model,threshold,accuracy,roc_auc,balanced_accuracy,precision,recall,f1
+Baseline Logistic Regression,0.5,0.6692,0.7516,0.6881,0.489,0.7405,0.589
+LASSO Logistic Regression with CV,0.5,0.6692,0.7516,0.6881,0.489,0.7405,0.589
+Decision Tree,0.5,0.6517,0.7184,0.6701,0.4712,0.7214,0.5701
+Random Forest,0.5,0.673,0.7415,0.6883,0.4928,0.731,0.5887
+Bernoulli Naive Bayes,0.5,0.67,0.7105,0.6584,0.4879,0.6262,0.5485
+Gradient Boosting,0.5,0.7149,0.7462,0.6146,0.5975,0.3357,0.4299
