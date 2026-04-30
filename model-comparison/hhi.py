@@ -41,6 +41,7 @@ thresholds = {
 }
 
 # Run models
+print("testing models with low_fpl")
 comparison, fitted_models = run_classification_models(
     df=df,
     target_col="low_HHI",
@@ -54,13 +55,14 @@ comparison, fitted_models = run_classification_models(
     threshold_metric="balanced_accuracy"
 )
 
+print("testing models with high_fpl")
 comparison, fitted_models = run_classification_models(
     df=df,
-    target_col="low_HHI",
+    target_col="high_HHI",
     predictor_vars=knowledge_vars,
     nb_vars=nb_vars,
     raw_missing_map={"SUBKNOWL1": [-1]},
-    target_name="low_fpl",
+    target_name="high_fpl",
     test_size=0.25,
     random_state=42,
     tune_threshold=True,
