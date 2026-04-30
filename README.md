@@ -80,7 +80,8 @@ This threshold captures a meaningful distinction between financially vulnerable 
 
 - Model comparison table
 <img src="data/savings_table.png" width="600">
-<img src="visuals/plots/savings_comparison.png" width="300">
+
+<img src="visuals/plots/savings_comparison.png" width="500">
 
 We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
 
@@ -91,10 +92,10 @@ Decision trees show higher recall but lower precision, indicating they tend to o
 These results suggest that while more flexible machine learning models provide slight improvements, the predictive power of financial knowledge variables alone is moderate.
 
 - ROC AUC visualization
-<img src="visuals/savings_roc_auc.png" width="600">
+<img src="visuals/plots/savings_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
-<img src="visuals/plots/savings_confusion_matrices/cm_decision_tree.png" width="300">
+<img src="visuals/plots/savings_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="300">
 
 Gradient Boosting and CatBoost performed similarly well, but Logistic Regression achieved the highest ROC AUC and F1 score overall.
 
