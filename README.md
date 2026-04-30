@@ -39,6 +39,15 @@ The data are split into a training set and a held-out test set. When threshold t
 ## IV. Analysis and Results
 ### Federal Poverty Status
 
+This section examines whether financial knowledge measures can predict whether a household lives below 200% of the Federal Poverty Level (FPL). The motivation is that households below this threshold are widely considered economically vulnerable, often qualifying for safety-net programs and facing greater difficulty absorbing financial shocks.
+
+The target variable is constructed as a binary indicator:
+
+* 0 = Household is at or above 200% of the Federal Poverty Level
+* 1 = Household is below 200% of the Federal Poverty Level
+
+This threshold separates households that are clearly economically secure from those that are near or below the commonly used "low-income" line.
+
 - Model comparison table
 
 | Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
@@ -51,9 +60,27 @@ The data are split into a training set and a held-out test set. When threshold t
 | Gradient Boosting | 0.19 | 0.6523 | 0.7671 | 0.7040 | 0.3880 | 0.8026 | 0.5232 |
 | CatBoost | 0.21 | 0.6798 | 0.7675 | 0.7085 | 0.4073 | 0.7632 | 0.5311 |
 
+<img src="visuals/plots/fpl_comparison.png" width="500">
+
+We compare seven classification models: logistic regression, LASSO logistic regression, decision tree, random forest, Bernoulli Naive Bayes, gradient boosting, and CatBoost.
+
+Overall, model performance is fairly similar across approaches, with ROC AUC values ranging from about 0.72 to 0.77. The headline metrics for CatBoost (ROC AUC 0.7675, balanced accuracy 0.7085, F1 0.5311) and Gradient Boosting (ROC AUC 0.7671, recall 0.8026) appear to lead the table, but a closer look reveals an important caveat: the tuned classification thresholds for these models are extreme. CatBoost requires a threshold of 0.21, Gradient Boosting 0.19, and Bernoulli Naive Bayes 0.15, well below the 0.5 default. In contrast, both logistic regression variants tune to 0.46–0.48 and Random Forest to 0.52, all close to the natural decision boundary.
+
+This pattern indicates that the boosting models' predicted probabilities are poorly calibrated for this target. They rank cases reasonably well (which is what ROC AUC measures), but the raw probability outputs do not correspond to actual risk of being below 200% FPL. In practice, this means their performance depends heavily on aggressive, dataset-specific threshold tuning, and the predicted probabilities cannot be interpreted as meaningful likelihoods, which is a serious drawback if the model is ever used to communicate household-level poverty risk.
+
+The logistic regression models, by contrast, deliver ROC AUC (~0.7643–0.7647) and balanced accuracy (~0.6969–0.6986) that are statistically indistinguishable from the boosting models, with differences of only a few thousandths. They also retain well-calibrated probabilities, transparent coefficients, and a decision threshold near 0.5. Decision trees show high recall but the lowest precision and F1, indicating they over-predict the positive class.
+
+These results suggest that financial knowledge variables alone provide moderate predictive power for poverty status, and that more flexible models offer no meaningful gain in discrimination over a simple, well-calibrated linear baseline.
+
 - ROC AUC visualization
 
+<img src="visuals/plots/fpl_roc_auc.png" width="600">
+
 - Confusion matrix for recommended/best model
+
+<img src="visuals/plots/fpl_confusion_matrices/cm_lasso_logistic_regression_with_cv.png" width="300">
+
+Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balanced accuracy, those gains are tiny (on the order of 0.003 in AUC) and are achieved only by tuning the decision threshold down to roughly 0.2, which is a clear sign of probability miscalibration. **LASSO Logistic Regression with cross-validation is the recommended model** for predicting whether a household is below 200% of the Federal Poverty Level. It matches the boosting models on ROC AUC and balanced accuracy, produces calibrated probabilities at a near-default threshold (0.48), provides interpretable coefficients showing which knowledge items drive the prediction, and applies regularization to guard against overfitting. For an outcome where decision-makers may care about both the classification and the underlying probability of poverty risk, the simpler linear model is the more reliable choice.
 
 - Feature importances (maybe)
 
