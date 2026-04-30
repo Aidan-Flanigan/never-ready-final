@@ -80,7 +80,7 @@ The data are split into a training set and a held-out test set. When threshold t
 
 - Confusion matrix for recommended/best model
 
-![High HHI Income Confusion Matrix](visuals/plots/high_HHI_confusion_matrices/cm_decision_tree.png)
+![High HHI Income Confusion Matrix](visuals/plots/high_HHI_confusion_matrices/cm_lasso_logistic_regression_with_cv.png)
 
 - Feature importances (maybe)
 
