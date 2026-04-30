@@ -88,7 +88,7 @@ Although CatBoost and Gradient Boosting post marginally higher ROC AUC and balan
 This section examines whether the selected features can predict whether a transaction is fraudulent. The motivation is that fraudulent transactions represent a direct financial loss to institutions and customers alike, and early detection is critical to minimizing exposure, preserving trust, and enabling timely intervention before harm compounds.
 The target variable is constructed as a binary indicator:
 
-0 = Transaction is legitimate
+0 = Transaction is legitimate  
 1 = Transaction is fraudulent
 
 This threshold separates normal account activity from transactions that warrant investigation or immediate action, making accurate classification making recall on the positive class the primary performance objective.
@@ -103,14 +103,23 @@ This threshold separates normal account activity from transactions that warrant 
 | Random Forest | 0.47 | 0.4952 | 0.5721 | 0.5544 | 0.3248 | 0.6943 | 0.4426 |
 | Bernoulli Naive Bayes | 0.20 | 0.4774 | 0.5759 | 0.5581 | 0.3244 | 0.7488 | 0.4527 |
 | Gradient Boosting | 0.27 | 0.5014 | 0.5669 | 0.5474 | 0.3217 | 0.6564 | 0.4318 |
-| CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |
+| CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |  
+
+<img src="visuals/plots/fraud_comparison.png" width="500">  
+Across all seven models the precision scores are relatively consistent, ranging from 0.322 to 0.346, suggesting that the models perform similarly in terms of the proportion of true positive. The more meaningful variation appears in recall, where Bernoulli Naive Bayes stands out with a score of 0.749, achieved at a relatively low decision threshold of 0.20. This reflects a more aggressive classification strategy that prioritizes identifying positive cases, resulting in fewer false negatives but more false positives. This tradeoff contributes to its higher F1 score (0.453) and the highest ROC-AUC (0.576) among the models, though its accuracy (0.477) and balanced accuracy (0.558) are more modest, reflecting the cost of operating at a lower threshold.  
+
+The tree-based and boosting models: Random Forest, Gradient Boosting, and CatBoost operate in the middle ground, with recall scores ranging from 0.656 to 0.701 and ROC-AUC values between 0.566 and 0.572. While these models achieve slightly higher overall accuracy than Naive Bayes, they underperform in terms of recall and F1 score, making them less suited for a fraud detection setting where identifying positive cases is the primary objective. The Decision Tree performs weakest overall, with the lowest recall (0.538), F1 score (0.408), and ROC-AUC (0.549) among the models, indicating limited ability to effectively distinguish between classes.  
+
+Logistic Regression and LASSO Logistic CV achieve the highest overall accuracy (0.545 and 0.517) and remain competitive in terms of ROC-AUC (both around 0.572), but their recall falls meaningfully below that of Bernoulli Naive Bayes. When prioritizing the identification of fraud cases, this difference in recall becomes especially important. Overall, the results suggest that Bernoulli Naive Bayes is the most suitable model under a recall-focused objective, as it performs best on the metrics most relevant to fraud detection.
 
 - ROC AUC visualization
 <img src="visuals/plots/fraud_roc_auc.png" width="600">
 
 - Confusion matrix for recommended/best model
 <img src="visuals/plots/fraud_confusion_matrices/cm_bernoulli_naive_bayes.png" width="600">
-For a fraud detection task, Bernoulli Naive Bayes stands out as the best-performing model across the metrics that matter most. It achieves the highest ROC-AUC score (0.5759), indicating it has the strongest overall ability to distinguish between fraudulent and legitimate transactions. More importantly, it leads all models in recall at 0.7488, meaning it successfully catches nearly 75% of actual fraud cases. This is especially important in fraud detection system where any missed fraud carries significant financial and reputational risk. It also posts the best F1 score (0.4527) and balanced accuracy (0.5581), confirming that its strong recall doesn't come entirely at the expense of other performance dimensions. The model does operate at a low decision threshold of 0.20, which results in lower precision and raw accuracy, meaning it generates more false positives than its competitors. However, in fraud detection this is a deliberate and defensible tradeoff since the cost of failing to catch a fraudulent transaction outweights the cost of flagging a legitimate one for secondary review, making a high-recall model the best choice if it's less precise.
+For a fraud detection task, Bernoulli Naive Bayes stands out as the strongest-performing model under a recall-focused objective. It achieves the highest ROC-AUC score (0.5759), suggesting slightly better overall ability to distinguish between fraudulent and legitimate transactions relative to the other models. More importantly, it leads all models in recall at 0.7488, meaning it successfully identifies nearly 75% of actual fraud cases. This is especially important in a fraud detection system, where missed fraud carries significant financial and reputational risk. It also achieves the highest F1 score (0.4527) and balanced accuracy (0.5581), indicating that its strong recall is not achieved entirely at the expense of overall performance.  
+
+The model operates at a relatively low decision threshold of 0.20, which results in lower precision and raw accuracy, meaning it generates more false positives than competing models. However, in a fraud detection context, this represents a deliberate and defensible tradeoff, as the cost of failing to detect fraudulent activity outweighs the cost of incorrectly flagging legitimate transactions for further review. As a result, the high-recall model of Bernoulli Naive Bayes is better aligned with the fraud objectives, even at the expense of precision.
 
 - Feature importances (maybe)
 
