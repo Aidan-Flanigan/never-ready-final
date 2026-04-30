@@ -41,6 +41,16 @@ The data are split into a training set and a held-out test set. When threshold t
 
 - Model comparison table
 
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.46 | 0.6854 | 0.7647 | 0.6986 | 0.4086 | 0.7237 | 0.5223 |
+| LASSO Logistic Regression with CV | 0.48 | 0.6898 | 0.7643 | 0.6969 | 0.4116 | 0.7105 | 0.5212 |
+| Decision Tree | 0.42 | 0.6079 | 0.7162 | 0.6595 | 0.3499 | 0.7579 | 0.4788 |
+| Random Forest | 0.52 | 0.6992 | 0.7629 | 0.6967 | 0.4195 | 0.6921 | 0.5223 |
+| Bernoulli Naive Bayes | 0.15 | 0.6785 | 0.7533 | 0.6941 | 0.4020 | 0.7237 | 0.5169 |
+| Gradient Boosting | 0.19 | 0.6523 | 0.7671 | 0.7040 | 0.3880 | 0.8026 | 0.5232 |
+| CatBoost | 0.21 | 0.6798 | 0.7675 | 0.7085 | 0.4073 | 0.7632 | 0.5311 |
+
 - ROC AUC visualization
 
 - Confusion matrix for recommended/best model
@@ -50,6 +60,16 @@ The data are split into a training set and a held-out test set. When threshold t
 ### Fraud Exposure
 
 - Model comparison table
+
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.50 | 0.5451 | 0.5714 | 0.5747 | 0.3456 | 0.6445 | 0.4500 |
+| LASSO Logistic Regression with CV | 0.49 | 0.5171 | 0.5717 | 0.5606 | 0.3318 | 0.6635 | 0.4423 |
+| Decision Tree | 0.54 | 0.5492 | 0.5492 | 0.5459 | 0.3285 | 0.5379 | 0.4079 |
+| Random Forest | 0.47 | 0.4952 | 0.5721 | 0.5544 | 0.3248 | 0.6943 | 0.4426 |
+| Bernoulli Naive Bayes | 0.20 | 0.4774 | 0.5759 | 0.5581 | 0.3244 | 0.7488 | 0.4527 |
+| Gradient Boosting | 0.27 | 0.5014 | 0.5669 | 0.5474 | 0.3217 | 0.6564 | 0.4318 |
+| CatBoost | 0.26 | 0.4979 | 0.5669 | 0.5584 | 0.3274 | 0.7014 | 0.4465 |
 
 - ROC AUC visualization
 
@@ -113,6 +133,16 @@ The data are split into a training set and a held-out test set. When threshold t
 
 - Model comparison table
 
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
+| LASSO Logistic Regression with CV | 0.43 | 0.6303 | 0.7516 | 0.6840 | 0.4575 | 0.8333 | 0.5907 |
+| Decision Tree | 0.40 | 0.5694 | 0.7184 | 0.6505 | 0.4177 | 0.8762 | 0.5657 |
+| Random Forest | 0.45 | 0.6326 | 0.7415 | 0.6819 | 0.4587 | 0.8190 | 0.5880 |
+| Bernoulli Naive Bayes | 0.21 | 0.5877 | 0.7105 | 0.6501 | 0.4256 | 0.8238 | 0.5612 |
+| Gradient Boosting | 0.26 | 0.6265 | 0.7462 | 0.6794 | 0.4542 | 0.8262 | 0.5861 |
+| CatBoost | 0.26 | 0.6220 | 0.7427 | 0.6766 | 0.4508 | 0.8286 | 0.5839 |
+
 - ROC AUC visualization
 
 - Confusion matrix for recommended/best model
@@ -122,6 +152,16 @@ The data are split into a training set and a held-out test set. When threshold t
 ### Financial Volatility
 
 - Model comparison table
+
+| Model | Threshold | Accuracy | ROC AUC | Balanced Accuracy | Precision | Recall | F1 |
+|-------|-----------|----------|---------|-------------------|-----------|--------|----|
+| Baseline Logistic Regression | 0.51 | 0.6418 | 0.6654 | 0.6206 | 0.9578 | 0.6450 | 0.7709 |
+| LASSO Logistic Regression with CV | 0.51 | 0.6210 | 0.6631 | 0.6318 | 0.9612 | 0.6193 | 0.7533 |
+| Decision Tree | 0.48 | 0.6791 | 0.6235 | 0.6048 | 0.9533 | 0.6903 | 0.8008 |
+| Random Forest | 0.52 | 0.6785 | 0.7039 | 0.6536 | 0.9628 | 0.6822 | 0.7986 |
+| Bernoulli Naive Bayes | 0.95 | 0.5900 | 0.6722 | 0.6376 | 0.9642 | 0.5828 | 0.7265 |
+| Gradient Boosting | 0.94 | 0.6304 | 0.6795 | 0.6100 | 0.9561 | 0.6335 | 0.7621 |
+| CatBoost | 0.95 | 0.5616 | 0.6510 | 0.6000 | 0.9569 | 0.5558 | 0.7032 |
 
 - ROC AUC visualization
 
